@@ -3,152 +3,251 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vaduvanthan's Portfolio</title>
+    <title>Vaduvanthan P's Portfolio</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts - Inter for a modern sans-serif look -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        /* Custom styles to maintain terminal theme and override some Tailwind defaults if needed */
         body {
-            @apply bg-gray-900 text-green-400 font-mono; /* Dark background, green text, monospace font */
-            font-family: 'Inter', monospace; /* Using Inter for overall text, monospace for terminal effect */
-            min-height: 100vh; /* Ensure body takes full viewport height */
-            display: flex;
-            flex-direction: column;
+            font-family: 'Inter', sans-serif;
+            @apply bg-gray-50 text-gray-800; /* Light background, dark text */
         }
-        .terminal-border {
-            @apply border-2 border-green-500 rounded-lg shadow-lg; /* Green border, rounded corners, shadow */
-        }
-        .prompt::before {
-            content: "vaduvanthan@portfolio:~$ ";
-            @apply text-lime-400; /* Lighter green for prompt */
+        .container {
+            @apply max-w-6xl mx-auto px-4 sm:px-6 lg:px-8; /* Centralized content area */
         }
         .section-title {
-            @apply text-green-300 text-xl font-bold mb-4 border-b border-green-600 pb-2; /* Styled section titles */
+            @apply text-3xl sm:text-4xl font-bold text-gray-900 mb-6 border-b-2 border-blue-500 pb-2; /* Styled section titles */
         }
-        .nav-link {
-            @apply text-lime-400 hover:text-green-200 transition-colors duration-200; /* Nav link styling */
+        .card {
+            @apply bg-white rounded-lg shadow-md p-6 transition-all duration-300 hover:shadow-lg; /* Card styling */
         }
-        /* Style for text within terminal blocks */
-        .terminal-text {
-            @apply text-green-400;
+        .btn-primary {
+            @apply inline-block bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition-colors duration-200; /* Primary button style */
+        }
+        .link-accent {
+            @apply text-blue-600 hover:underline hover:text-blue-700 transition-colors duration-200; /* Accent link style */
+        }
+        .gradient-bg {
+            background: linear-gradient(to right, #6366f1, #8b5cf6); /* Indigo to Purple gradient */
         }
     </style>
 </head>
-<body class="p-4 sm:p-6 md:p-8">
-    <!-- Header with Navigation -->
-    <header class="w-full max-w-4xl mx-auto py-4 mb-8 terminal-border bg-gray-800 p-6">
-        <nav class="flex flex-col sm:flex-row justify-between items-center space-y-4 sm:space-y-0">
-            <h1 class="text-3xl font-bold text-lime-400">Vaduvanthan P.</h1>
+<body class="antialiased leading-relaxed">
+    <!-- Header/Navigation Bar -->
+    <header class="bg-white shadow-sm py-4 sticky top-0 z-50">
+        <nav class="container flex justify-between items-center">
+            <a href="#hero" class="text-2xl font-bold text-gray-900">Vaduvanthan P.</a>
             <ul class="flex space-x-6">
-                <li><a href="#about" class="nav-link">About</a></li>
-                <li><a href="#skills" class="nav-link">Skills</a></li>
-                <li><a href="#projects" class="nav-link">Projects</a></li>
-                <li><a href="#contact" class="nav-link">Contact</a></li>
+                <li><a href="#about" class="text-gray-600 hover:text-blue-600 font-medium">About</a></li>
+                <li><a href="#skills" class="text-gray-600 hover:text-blue-600 font-medium">Skills</a></li>
+                <li><a href="#projects" class="text-gray-600 hover:text-blue-600 font-medium">Projects</a></li>
+                <li><a href="#experience" class="text-gray-600 hover:text-blue-600 font-medium">Experience</a></li>
+                <li><a href="#education" class="text-gray-600 hover:text-blue-600 font-medium">Education</a></li>
+                <li><a href="#certifications" class="text-gray-600 hover:text-blue-600 font-medium">Certifications</a></li>
+                <li><a href="#contact" class="text-gray-600 hover:text-blue-600 font-medium">Contact</a></li>
             </ul>
         </nav>
     </header>
 
+    <!-- Hero Section -->
+    <section id="hero" class="gradient-bg text-white py-20 sm:py-28 text-center">
+        <div class="container">
+            <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold mb-4 animate-fade-in-down">
+                Vaduvanthan P.
+            </h1>
+            <p class="text-xl sm:text-2xl font-light mb-8 animate-fade-in-up">
+                Passionate Software Engineer | Blockchain & Cloud Enthusiast
+            </p>
+            <div class="space-x-4 animate-fade-in-up-delay">
+                <a href="https://linkedin.com/in/yourlinkedinprofile" target="_blank" class="btn-primary bg-white text-blue-600 hover:bg-gray-100">LinkedIn</a>
+                <a href="https://github.com/YourGitHubUsername" target="_blank" class="btn-primary bg-white text-blue-600 hover:bg-gray-100">GitHub</a>
+            </div>
+        </div>
+    </section>
+
     <!-- Main Content Area -->
-    <main class="flex-grow w-full max-w-4xl mx-auto space-y-8">
-        <!-- Hero/Welcome Section -->
-        <section id="welcome" class="terminal-border bg-gray-800 p-6 mb-8 rounded-lg">
-            <h2 class="text-2xl font-bold text-green-300 mb-4">Welcome to My Portfolio</h2>
-            <p class="prompt terminal-text">Hello, I am a software engineer passionate about coding and technology.</p>
-            <p class="prompt terminal-text">I specialize in [mention your primary specialization, e.g., Full-Stack Development, Data Science, Backend Engineering].</p>
-            <p class="prompt terminal-text">Explore my work and feel free to connect!</p>
-        </section>
+    <main class="py-12">
+        <div class="container space-y-16">
 
-        <!-- About Me Section -->
-        <section id="about" class="terminal-border bg-gray-800 p-6 rounded-lg">
-            <h3 class="section-title">About Me</h3>
-            <p class="prompt terminal-text mb-2">I am a driven software engineer with [X years] of experience in [Your Industry/Domain].</p>
-            <p class="prompt terminal-text mb-2">My journey into technology began with [a brief story or passion, e.g., building small programs, disassembling computers].</p>
-            <p class="prompt terminal-text">I thrive on solving complex problems and building robust, scalable, and efficient software solutions.</p>
-        </section>
-
-        <!-- Skills Section -->
-        <section id="skills" class="terminal-border bg-gray-800 p-6 rounded-lg">
-            <h3 class="section-title">Skills</h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                    <p class="prompt terminal-text font-bold">Programming Languages:</p>
-                    <ul class="list-disc list-inside ml-4">
-                        <li class="prompt terminal-text">Python, Java, JavaScript, C++</li>
-                        <li class="prompt terminal-text">[Add other languages]</li>
-                    </ul>
-                </div>
-                <div>
-                    <p class="prompt terminal-text font-bold">Web Technologies:</p>
-                    <ul class="list-disc list-inside ml-4">
-                        <li class="prompt terminal-text">HTML, CSS, JavaScript (React, Vue, Angular)</li>
-                        <li class="prompt terminal-text">Node.js, Express.js</li>
-                        <li class="prompt terminal-text">[Add other web technologies]</li>
-                    </ul>
-                </div>
-                <div>
-                    <p class="prompt terminal-text font-bold">Databases:</p>
-                    <ul class="list-disc list-inside ml-4">
-                        <li class="prompt terminal-text">MySQL, PostgreSQL, MongoDB</li>
-                        <li class="prompt terminal-text">[Add other databases]</li>
-                    </ul>
-                </div>
-                <div>
-                    <p class="prompt terminal-text font-bold">Tools & Platforms:</p>
-                    <ul class="list-disc list-inside ml-4">
-                        <li class="prompt terminal-text">Git, GitHub, Docker</li>
-                        <li class="prompt terminal-text">AWS, Azure, GCP</li>
-                        <li class="prompt terminal-text">[Add other tools]</li>
-                    </ul>
-                </div>
-            </div>
-        </section>
-
-        <!-- Projects Section -->
-        <section id="projects" class="terminal-border bg-gray-800 p-6 rounded-lg">
-            <h3 class="section-title">Projects</h3>
-            <div class="space-y-6">
-                <!-- Project 1 -->
-                <div class="border border-green-600 p-4 rounded-md">
-                    <p class="prompt terminal-text font-bold text-lg mb-1">School Management System (Python, MySQL)</p>
-                    <p class="prompt terminal-text mb-2">A console-based system for managing student, employee, fee, and exam details. Demonstrates CRUD operations and database interaction.</p>
-                    <p class="prompt terminal-text">
-                        <a href="https://github.com/YourGitHubUsername/school-management-system" target="_blank" class="text-blue-400 hover:underline">View on GitHub</a>
-                        <!-- Add a live demo link if applicable -->
-                        <!-- <span class="mx-2">|</span> <a href="#" target="_blank" class="text-blue-400 hover:underline">Live Demo</a> -->
+            <!-- About Me Section -->
+            <section id="about">
+                <h2 class="section-title">About Me</h2>
+                <div class="card">
+                    <p class="text-lg mb-4">
+                        A passionate software engineer with hands-on experience in developing secure blockchain-based voting systems and cloud-integrated school management systems.
+                    </p>
+                    <p class="text-lg">
+                        Proficient in Java, C++, SQL, and AWS, with a strong foundation in data structures and algorithms. I thrive on delivering efficient solutions, evidenced by my contributions to AI-driven CRM tools and cloud-based accounting systems during team-based projects and internships.
                     </p>
                 </div>
-                <!-- Project 2 (Example) -->
-                <div class="border border-green-600 p-4 rounded-md">
-                    <p class="prompt terminal-text font-bold text-lg mb-1">[Project Name 2]</p>
-                    <p class="prompt terminal-text mb-2">[Brief description of Project 2. What problem does it solve? What technologies were used?]</p>
-                    <p class="prompt terminal-text">
-                        <a href="#" target="_blank" class="text-blue-400 hover:underline">View on GitHub</a>
-                        <!-- <span class="mx-2">|</span> <a href="#" target="_blank" class="text-blue-400 hover:underline">Live Demo</a> -->
-                    </p>
-                </div>
-                <!-- Add more projects as needed -->
-            </div>
-        </section>
+            </section>
 
-        <!-- Contact Section -->
-        <section id="contact" class="terminal-border bg-gray-800 p-6 rounded-lg">
-            <h3 class="section-title">Contact</h3>
-            <p class="prompt terminal-text mb-2">I'm always open to new opportunities and collaborations. Feel free to reach out!</p>
-            <p class="prompt terminal-text mb-2">
-                <a href="mailto:your.email@example.com" class="text-blue-400 hover:underline">Email: your.email@example.com</a>
-            </p>
-            <p class="prompt terminal-text">
-                <a href="https://linkedin.com/in/yourlinkedinprofile" target="_blank" class="text-blue-400 hover:underline">LinkedIn: yourlinkedinprofile</a>
-            </p>
-            <p class="prompt terminal-text">
-                <a href="https://github.com/YourGitHubUsername" target="_blank" class="text-blue-400 hover:underline">GitHub: YourGitHubUsername</a>
-            </p>
-        </section>
+            <!-- Skills Section -->
+            <section id="skills">
+                <h2 class="section-title">Technical Skills</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="card">
+                        <h3 class="text-xl font-semibold mb-3 text-blue-600">Programming Languages</h3>
+                        <ul class="list-disc list-inside space-y-1 text-gray-700">
+                            <li>Java</li>
+                            <li>C++</li>
+                            <li>SQL</li>
+                            <li>AWS (as a scripting/configuration context)</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <h3 class="text-xl font-semibold mb-3 text-blue-600">Core Concepts</h3>
+                        <ul class="list-disc list-inside space-y-1 text-gray-700">
+                            <li>Data Structures</li>
+                            <li>Design and Analysis of Algorithms (DAA)</li>
+                            <li>Object-Oriented Programming (OOPS)</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <h3 class="text-xl font-semibold mb-3 text-blue-600">Tools & Platforms</h3>
+                        <ul class="list-disc list-inside space-y-1 text-gray-700">
+                            <li>Ganache</li>
+                            <li>KNN</li>
+                            <li>SHA-256</li>
+                            <li>MySQL</li>
+                            <li>AWS</li>
+                            <li>Git, GitHub</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <h3 class="text-xl font-semibold mb-3 text-blue-600">Human Languages</h3>
+                        <ul class="list-disc list-inside space-y-1 text-gray-700">
+                            <li>English</li>
+                            <li>Tamil</li>
+                            <li>Hindi</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Projects Section -->
+            <section id="projects">
+                <h2 class="section-title">Projects</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Project 1: Online Voting System Using Blockchain -->
+                    <div class="card">
+                        <h3 class="text-xl font-semibold mb-2 text-blue-600">Online Voting System Using Blockchain</h3>
+                        <p class="text-gray-700 mb-3 text-sm">Blockchain Development Project</p>
+                        <ul class="list-disc list-inside space-y-1 text-gray-700 mb-4">
+                            <li>Designed and implemented a blockchain-based voting system, reducing vote tampering by 30%.</li>
+                            <li>Utilized smart contracts to ensure 100% transparency in the voting process.</li>
+                            <li>Integrated SHA-256 for hashing, KNN for voter verification, and Ganache for simulation, improving security by 40%.</li>
+                        </ul>
+                        <p class="text-sm font-medium text-gray-600">Technologies: Ganache, KNN, SHA-256</p>
+                        <div class="mt-4">
+                            <a href="https://github.com/YourGitHubUsername/Online-Voting-System-Using-Blockchain" target="_blank" class="link-accent">View on GitHub</a>
+                        </div>
+                    </div>
+
+                    <!-- Project 2: School Management System -->
+                    <div class="card">
+                        <h3 class="text-xl font-semibold mb-2 text-blue-600">School Management System</h3>
+                        <p class="text-gray-700 mb-3 text-sm">Software Development Project</p>
+                        <ul class="list-disc list-inside space-y-1 text-gray-700 mb-4">
+                            <li>Built a school management system using Java MySQL, streamlining admin tasks by 25%.</li>
+                            <li>Added modules for student records, staff details, and fee management, improving data accuracy by 30%.</li>
+                            <li>Deployed the API on a cloud platform, enhancing integration efficiency by 20%.</li>
+                        </ul>
+                        <p class="text-sm font-medium text-gray-600">Technologies: Java, MySQL</p>
+                        <div class="mt-4">
+                            <a href="https://github.com/YourGitHubUsername/school-management-system" target="_blank" class="link-accent">View on GitHub</a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Experience Section -->
+            <section id="experience">
+                <h2 class="section-title">Experience</h2>
+                <div class="card">
+                    <h3 class="text-xl font-semibold text-blue-600">Software Engineer - Intern</h3>
+                    <p class="text-gray-700 mb-2">Surya Informatics Solution Private Limited, Ashok Nagar, Chennai</p>
+                    <p class="text-gray-600 text-sm mb-4">Early 2024 (Approximate, as resume dates vary slightly)</p>
+                    <ul class="list-disc list-inside space-y-1 text-gray-700">
+                        <li>Improved CRM and Sales IQ tools with AI, boosting engagement by 15%.</li>
+                        <li>Built cloud accounting solutions, cutting manual data entry by 20%.</li>
+                        <li>Integrated cybersecurity measures, ensuring 100% data protection.</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Education Section -->
+            <section id="education">
+                <h2 class="section-title">Education</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="card">
+                        <h3 class="text-xl font-semibold text-blue-600">B.E. in Computer Science And Engineering</h3>
+                        <p class="text-gray-700">Vels Institute Of Science And Technology - Chennai.</p>
+                        <p class="text-gray-600 text-sm mb-2">August 2021 - May 2025</p>
+                        <p class="text-gray-700">CGPA: 7.8/10</p>
+                    </div>
+                    <div class="card">
+                        <h3 class="text-xl font-semibold text-blue-600">Higher Secondary School Certificate (HSC) & Secondary School Leaving Certificate (SSLC)</h3>
+                        <p class="text-gray-700">St. Joseph's Matriculation Higher Secondary School - Chennai.</p>
+                        <p class="text-gray-600 text-sm mb-2">Completed schooling from Lower Kindergarten to Grade 12.</p>
+                        <p class="text-gray-700">SSLC: 398, HSC: 409</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Certifications Section -->
+            <section id="certifications">
+                <h2 class="section-title">Certifications</h2>
+                <div class="card">
+                    <ul class="list-disc list-inside space-y-2 text-gray-700">
+                        <li>Cloud Computing Advanced (AWS), Futurecalls.</li>
+                        <li>Cloud Computing, NPTEL.</li>
+                        <li>Software Testing, NPTEL.</li>
+                        <li>Cyber Security, Futurecalls.</li>
+                        <li>Typing Certification (30 Words per minute).</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Contact Section -->
+            <section id="contact">
+                <h2 class="section-title">Contact</h2>
+                <div class="card">
+                    <p class="text-lg mb-4">I'm always open to new opportunities and collaborations. Feel free to reach out!</p>
+                    <div class="space-y-3">
+                        <p class="text-gray-700 flex items-center">
+                            <span class="mr-2">&#9993;</span>
+                            <a href="mailto:praveenvaduvanathan@gmail.com" class="link-accent">praveenvaduvanathan@gmail.com</a>
+                        </p>
+                        <p class="text-gray-700 flex items-center">
+                            <span class="mr-2">&#9742;</span>
+                            <a href="tel:+917305410425" class="link-accent">+91 73054 10425</a>
+                        </p>
+                        <p class="text-gray-700 flex items-center">
+                            <span class="mr-2">&#128279;</span>
+                            <a href="https://linkedin.com/in/yourlinkedinprofile" target="_blank" class="link-accent">LinkedIn Profile</a>
+                        </p>
+                        <p class="text-gray-700 flex items-center">
+                            <span class="mr-2">&#128187;</span>
+                            <a href="https://github.com/YourGitHubUsername" target="_blank" class="link-accent">GitHub Profile</a>
+                        </p>
+                        <p class="text-gray-700 flex items-center">
+                            <span class="mr-2">&#128205;</span>
+                            Chennai, India.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+        </div>
     </main>
 
     <!-- Footer -->
-    <footer class="w-full max-w-4xl mx-auto py-6 mt-8 text-center text-gray-500 text-sm">
-        <p>&copy; 2025 Vaduvanthan P. All rights reserved.</p>
+    <footer class="bg-gray-800 text-gray-300 py-6 text-center mt-12">
+        <div class="container">
+            <p>&copy; 2025 Vaduvanthan P. All rights reserved.</p>
+        </div>
     </footer>
 </body>
 </html>

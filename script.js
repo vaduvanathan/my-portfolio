@@ -33,7 +33,8 @@ const portfolioData = {
             title: "Ticketchain – Web3 Ticketing System",
             description: "Decentralized ticketing system where users earn/lose credit scores based on attendance. Features early/late arrival scoring and rating-based bonuses.",
             tech: ["Solidity", "Supabase", "Render", "Web3.js"],
-            link: "https://ticketchain-plo6.onrender.com/home.html"
+            link: "https://ticketchain-plo6.onrender.com/home.html",
+            linkText: "Live Project →"
         },
         {
             title: "Online Voting System Using Blockchain",
@@ -209,7 +210,8 @@ const renderProjects = () => {
             techStack.appendChild(createElement('span', 'text-xs font-mono text-purple-400 border border-purple-500/30 px-2 py-1 rounded', t));
         });
         
-        const link = createElement('a', 'inline-flex items-center text-white font-medium hover:text-purple-400 transition-colors', 'View Code →');
+        const linkText = project.linkText || 'View Code →';
+        const link = createElement('a', 'inline-flex items-center text-white font-medium hover:text-purple-400 transition-colors', linkText);
         link.href = project.link;
         link.target = '_blank';
         

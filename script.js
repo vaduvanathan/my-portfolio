@@ -28,6 +28,12 @@ const portfolioData = {
             description: "Built a school management system streamlining admin tasks by 25%. Added modules for student records and fee management.",
             tech: ["Java", "MySQL", "Cloud Deployment"],
             link: "https://github.com/vaduvanathan/school-management-system"
+        },
+        {
+            title: "Online Voting System Using Blockchain",
+            description: "Developed a secure voting system using blockchain technology to ensure transparency and prevent fraud.",
+            tech: ["Blockchain", "Solidity", "Metamask"],
+            link: "#" // Please provide the link
         }
     ],
     education: [
@@ -45,11 +51,11 @@ const portfolioData = {
         }
     ],
     certifications: [
-        "Cloud Computing Advanced (AWS)",
-        "Cloud Computing (NPTEL)",
-        "Software Testing (NPTEL)",
-        "Cyber Security (Futurecalls)",
-        "Typing Certification (30 WPM)"
+        { title: "Cloud Computing Advanced (AWS)", link: "https://drive.google.com/drive/folders/1--NSal-d83tPRh5FCHkxoTPXUc2CjZ3B?usp=drive_link" },
+        { title: "Cloud Computing (NPTEL)", link: "https://drive.google.com/drive/folders/1--NSal-d83tPRh5FCHkxoTPXUc2CjZ3B?usp=drive_link" },
+        { title: "Software Testing (NPTEL)", link: "https://drive.google.com/drive/folders/1--NSal-d83tPRh5FCHkxoTPXUc2CjZ3B?usp=drive_link" },
+        { title: "Cyber Security (Futurecalls)", link: "https://drive.google.com/drive/folders/1--NSal-d83tPRh5FCHkxoTPXUc2CjZ3B?usp=drive_link" },
+        { title: "Typing Certification (30 WPM)", link: "https://drive.google.com/drive/folders/1--NSal-d83tPRh5FCHkxoTPXUc2CjZ3B?usp=drive_link" }
     ]
 };
 
@@ -73,7 +79,7 @@ const renderHeader = () => {
     logo.href = '#';
     
     const ul = createElement('ul', 'hidden md:flex space-x-8');
-    ['About', 'Skills', 'Projects', 'Education', 'Contact'].forEach(item => {
+    ['About', 'Skills', 'Projects', 'Education', 'Resume', 'Contact'].forEach(item => {
         const li = createElement('li');
         const a = createElement('a', 'text-sm font-medium text-gray-400 hover:text-white transition-colors duration-300', item);
         a.href = `#${item.toLowerCase()}`;
@@ -244,7 +250,10 @@ const renderEducation = () => {
     const certList = createElement('ul', 'space-y-4');
     portfolioData.certifications.forEach(cert => {
         const li = createElement('li', 'flex items-center text-gray-400');
-        li.innerHTML = `<span class="text-green-400 mr-3">✓</span> ${cert}`;
+        const link = createElement('a', 'hover:text-blue-400 transition-colors flex items-center gap-2', `<span class="text-green-400">✓</span> ${cert.title}`);
+        link.href = cert.link;
+        link.target = '_blank';
+        li.appendChild(link);
         certList.appendChild(li);
     });
     certCol.appendChild(certList);
@@ -252,6 +261,37 @@ const renderEducation = () => {
     grid.appendChild(eduCol);
     grid.appendChild(certCol);
     container.appendChild(grid);
+    section.appendChild(container);
+    return section;
+};
+
+// Render Resume
+const renderResume = () => {
+    const section = createElement('section', 'py-20', '');
+    section.id = 'resume';
+    const container = createElement('div', 'container mx-auto px-6 text-center');
+
+    container.appendChild(renderSectionTitle('Resume'));
+
+    const card = createElement('div', 'max-w-4xl mx-auto p-1 rounded-2xl bg-gradient-to-b from-white/10 to-transparent border border-white/10 backdrop-blur-sm');
+    
+    // PDF Preview (Iframe)
+    const iframeContainer = createElement('div', 'w-full h-[600px] rounded-xl overflow-hidden bg-white/5 mb-6');
+    const iframe = createElement('iframe', 'w-full h-full');
+    iframe.src = "./resume.pdf#toolbar=0";
+    iframeContainer.appendChild(iframe);
+
+    // Download Button
+    const btnContainer = createElement('div', 'flex justify-center pb-6');
+    const downloadBtn = createElement('a', 'px-8 py-3 bg-blue-600 text-white rounded-full font-medium hover:bg-blue-700 transition-all flex items-center gap-2 shadow-lg shadow-blue-600/20 hover:shadow-blue-600/40 transform hover:-translate-y-1', 'Download Resume');
+    downloadBtn.href = "./resume.pdf";
+    downloadBtn.download = "Vaduvanathan_Resume.pdf";
+    downloadBtn.innerHTML = `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg> Download Resume`;
+
+    card.appendChild(iframeContainer);
+    card.appendChild(btnContainer);
+    
+    container.appendChild(card);
     section.appendChild(container);
     return section;
 };
@@ -297,6 +337,7 @@ const init = () => {
     app.appendChild(renderSkills());
     app.appendChild(renderProjects());
     app.appendChild(renderEducation());
+    app.appendChild(renderResume());
     app.appendChild(renderContact());
     app.appendChild(renderFooter());
 };

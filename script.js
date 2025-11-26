@@ -258,10 +258,15 @@ const renderEducation = () => {
     
     const certList = createElement('ul', 'space-y-4');
     portfolioData.certifications.forEach(cert => {
-        const li = createElement('li', 'flex items-center text-gray-400');
-        const link = createElement('a', 'hover:text-blue-400 transition-colors flex items-center gap-2', `<span class="text-green-400">✓</span> ${cert.title}`);
+        const li = createElement('li', 'flex items-center justify-between p-4 bg-white/5 rounded-xl border border-white/10 hover:border-blue-500/50 transition-all group');
+        
+        const title = createElement('span', 'text-gray-300 font-medium group-hover:text-white transition-colors', cert.title);
+        
+        const link = createElement('a', 'px-4 py-2 text-xs font-bold text-blue-400 bg-blue-500/10 rounded-full border border-blue-500/20 hover:bg-blue-500 hover:text-white transition-all', 'View Certificate');
         link.href = cert.link;
         link.target = '_blank';
+        
+        li.appendChild(title);
         li.appendChild(link);
         certList.appendChild(li);
     });

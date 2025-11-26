@@ -30,10 +30,10 @@ const portfolioData = {
             link: "https://github.com/vaduvanathan/school-management-system"
         },
         {
-            title: "Online Voting System Using Blockchain",
-            description: "Developed a secure voting system using blockchain technology to ensure transparency and prevent fraud.",
-            tech: ["Blockchain", "Solidity", "Metamask"],
-            link: "#" // Please provide the link
+            title: "Ticketchain – Web3 Ticketing System",
+            description: "Decentralized ticketing system where users earn/lose credit scores based on attendance. Features early/late arrival scoring and rating-based bonuses.",
+            tech: ["Solidity", "Supabase", "Render", "Web3.js"],
+            link: "https://ticketchain-plo6.onrender.com/home.html"
         }
     ],
     education: [
@@ -51,10 +51,11 @@ const portfolioData = {
         }
     ],
     certifications: [
-        { title: "Cloud Computing Advanced (AWS)", link: "https://drive.google.com/drive/folders/1--NSal-d83tPRh5FCHkxoTPXUc2CjZ3B?usp=drive_link" },
-        { title: "Cloud Computing (NPTEL)", link: "https://drive.google.com/drive/folders/1--NSal-d83tPRh5FCHkxoTPXUc2CjZ3B?usp=drive_link" },
-        { title: "Software Testing (NPTEL)", link: "https://drive.google.com/drive/folders/1--NSal-d83tPRh5FCHkxoTPXUc2CjZ3B?usp=drive_link" },
-        { title: "Cyber Security (Futurecalls)", link: "https://drive.google.com/drive/folders/1--NSal-d83tPRh5FCHkxoTPXUc2CjZ3B?usp=drive_link" },
+        { title: "Cloud Computing Advanced (AWS)", link: "https://drive.google.com/file/d/1-fdnVpkvWuUMSFmUO44VR7wYWn1izcxT/view" },
+        { title: "Cloud Computing (NPTEL)", link: "https://drive.google.com/file/d/1-gJ3GeFiBbp9J67FILt9S2BDXC3OSIVD/view" },
+        { title: "Software Testing (NPTEL)", link: "https://drive.google.com/file/d/1-zvXlbzGdhlZKwXNm8fFJ8ZAp6Twj_9j/view" },
+        { title: "Cyber Security (Futurecalls)", link: "https://drive.google.com/file/d/1l8Fu-EHJAjQeT4eQQCZWy4cJywz8hayF/view" },
+        { title: "Generative AI (IBM)", link: "https://www.credly.com/badges/72a6349b-b9fa-4866-866b-5834586f2723/whatsapp" },
         { title: "Typing Certification (30 WPM)", link: "https://drive.google.com/drive/folders/1--NSal-d83tPRh5FCHkxoTPXUc2CjZ3B?usp=drive_link" }
     ]
 };

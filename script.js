@@ -34,6 +34,12 @@ const portfolioData = {
             description: "Decentralized ticketing system where users earn/lose credit scores based on attendance. Features early/late arrival scoring and rating-based bonuses.",
             tech: ["Solidity", "Supabase", "Render", "Web3.js"],
             link: "https://ticketchain-plo6.onrender.com/home.html"
+        },
+        {
+            title: "Online Voting System Using Blockchain",
+            description: "Developed a secure voting system using blockchain technology to ensure transparency and prevent fraud.",
+            tech: ["Blockchain", "Solidity", "Metamask"],
+            link: "#"
         }
     ],
     education: [

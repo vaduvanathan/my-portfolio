@@ -147,7 +147,7 @@ const renderAbout = () => {
     
     container.appendChild(renderSectionTitle('About Me'));
     
-    const content = createElement('div', 'max-w-3xl mx-auto text-center text-gray-400 text-lg leading-relaxed border border-white/10 p-8 rounded-2xl bg-white/5 backdrop-blur-sm hover:border-blue-500/30 transition-colors duration-500');
+    const content = createElement('div', 'max-w-3xl mx-auto text-center text-gray-400 text-lg leading-relaxed border border-white/10 p-8 rounded-2xl bg-white/5 backdrop-blur-sm hover:border-blue-500/30 transition-colors duration-500 reveal slide-left');
     content.textContent = portfolioData.about;
     
     container.appendChild(content);
@@ -165,8 +165,9 @@ const renderSkills = () => {
     
     const grid = createElement('div', 'grid grid-cols-1 md:grid-cols-3 gap-8');
     
-    portfolioData.skills.forEach(category => {
-        const card = createElement('div', 'p-6 rounded-2xl bg-white/5 border border-white/10 hover:border-blue-500/50 transition-all duration-300 group');
+    portfolioData.skills.forEach((category, index) => {
+        const card = createElement('div', 'p-6 rounded-2xl bg-white/5 border border-white/10 hover:border-blue-500/50 transition-all duration-300 group reveal fade-up');
+        card.style.transitionDelay = `${index * 100}ms`;
         const title = createElement('h3', 'text-xl font-semibold mb-4 text-blue-400 group-hover:text-blue-300', category.category);
         const list = createElement('div', 'flex flex-wrap gap-2');
         
@@ -195,8 +196,9 @@ const renderProjects = () => {
     
     const grid = createElement('div', 'grid grid-cols-1 md:grid-cols-2 gap-8');
     
-    portfolioData.projects.forEach(project => {
-        const card = createElement('div', 'group relative p-8 rounded-3xl bg-gradient-to-b from-white/10 to-transparent border border-white/10 hover:border-purple-500/50 transition-all duration-500 overflow-hidden');
+    portfolioData.projects.forEach((project, index) => {
+        const animationClass = index % 2 === 0 ? 'slide-left' : 'slide-right';
+        const card = createElement('div', `group relative p-8 rounded-3xl bg-gradient-to-b from-white/10 to-transparent border border-white/10 hover:border-purple-500/50 transition-all duration-500 overflow-hidden reveal ${animationClass}`);
         
         // Hover Glow
         const glow = createElement('div', 'absolute inset-0 bg-purple-600/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-xl -z-10');
@@ -238,7 +240,7 @@ const renderEducation = () => {
     const grid = createElement('div', 'grid grid-cols-1 md:grid-cols-2 gap-12');
     
     // Education Column
-    const eduCol = createElement('div', 'space-y-6');
+    const eduCol = createElement('div', 'space-y-6 reveal slide-left');
     eduCol.appendChild(createElement('h3', 'text-2xl font-bold mb-6 text-gray-200', 'Education'));
     
     portfolioData.education.forEach(edu => {
@@ -253,7 +255,7 @@ const renderEducation = () => {
     });
     
     // Certs Column
-    const certCol = createElement('div', 'space-y-6');
+    const certCol = createElement('div', 'space-y-6 reveal slide-right');
     certCol.appendChild(createElement('h3', 'text-2xl font-bold mb-6 text-gray-200', 'Certifications'));
     
     const certList = createElement('ul', 'space-y-4');
@@ -380,7 +382,25 @@ const initCursor = () => {
     });
 };
 
+// Scroll Animations
+const initScrollAnimations = () => {
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('active');
+            }
+        });
+    }, {
+        threshold: 0.1
+    });
+
+    document.querySelectorAll('.reveal').forEach(el => {
+        observer.observe(el);
+    });
+};
+
 document.addEventListener('DOMContentLoaded', () => {
     init();
     initCursor();
+    initScrollAnimations();
 });

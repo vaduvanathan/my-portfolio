@@ -39,13 +39,27 @@ html {
 }
 
 /* Animations */
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
+.reveal {
+    opacity: 0;
+    transition: all 1s ease-out;
+    will-change: transform, opacity;
 }
 
-section {
-    animation: fadeIn 0.8s ease-out forwards;
+.reveal.active {
+    opacity: 1;
+    transform: translate(0, 0);
+}
+
+.slide-left {
+    transform: translateX(-100px);
+}
+
+.slide-right {
+    transform: translateX(100px);
+}
+
+.fade-up {
+    transform: translateY(50px);
 }
 
 /* Gradient Text Utility */

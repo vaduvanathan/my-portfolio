@@ -31,6 +31,12 @@ const portfolioData = {
             ]
         }
     ],
+    metrics: [
+        { value: "7.6K+", label: "upload hours saved" },
+        { value: "18K+", label: "devices shipped" },
+        { value: "50K+", label: "admin users handled" },
+        { value: "Win + macOS", label: "desktop upload apps" }
+    ],
     projects: [
         {
             title: "IoT-Based Flood Monitoring System",
@@ -83,7 +89,7 @@ const createElement = (tag, classes = '', content = '') => {
 
 // Render Header
 const renderHeader = () => {
-    const header = createElement('header', 'fixed w-full top-0 z-50 bg-black/80 backdrop-blur-md border-b border-white/10');
+    const header = createElement('header', 'site-header fixed w-full top-0 z-50 bg-black/80 backdrop-blur-md border-b border-white/10');
     const nav = createElement('nav', 'container mx-auto px-6 py-4 flex justify-between items-center');
     
     const logo = createElement('a', 'text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-600 cursor-pointer', 'VP.');
@@ -92,7 +98,7 @@ const renderHeader = () => {
     const ul = createElement('ul', 'hidden md:flex space-x-5 lg:space-x-8');
     ['About', 'Skills', 'Experience', 'Projects', 'Education', 'Resume', 'Contact'].forEach(item => {
         const li = createElement('li');
-        const a = createElement('a', 'text-sm font-medium text-gray-400 hover:text-white transition-colors duration-300', item);
+        const a = createElement('a', 'nav-link text-sm font-medium text-gray-400 hover:text-white transition-colors duration-300', item);
         a.href = `#${item.toLowerCase()}`;
         li.appendChild(a);
         ul.appendChild(li);
@@ -106,34 +112,48 @@ const renderHeader = () => {
 
 // Render Hero
 const renderHero = () => {
-    const section = createElement('section', 'min-h-screen flex items-center justify-center relative overflow-hidden pt-20');
-    
-    // Background Glow
-    const glow = createElement('div', 'absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-blue-600/20 rounded-full blur-[120px] -z-10');
-    section.appendChild(glow);
+    const section = createElement('section', 'hero-section min-h-screen flex items-center justify-center relative overflow-hidden pt-20');
+    const bgWord = createElement('div', 'hero-bg-word', 'ENGINEER');
+    section.appendChild(bgWord);
 
     const container = createElement('div', 'container mx-auto px-6 text-center z-10');
-    
-    const h1 = createElement('h1', 'text-5xl md:text-7xl font-bold mb-6 tracking-tight');
+
+    const eyebrow = createElement('div', 'hero-eyebrow reveal fade-up', 'Software Engineer - Production Tools - Upload Systems');
+
+    const h1 = createElement('h1', 'text-5xl md:text-7xl font-bold mb-6 tracking-tight reveal fade-up');
     h1.innerHTML = `Hi, I'm <span class="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500">${portfolioData.personal.name}</span>`;
-    
-    const p = createElement('p', 'text-xl md:text-2xl text-gray-400 mb-8 max-w-2xl mx-auto font-light', portfolioData.personal.tagline);
-    
-    const btnContainer = createElement('div', 'flex justify-center gap-4');
-    const btnPrimary = createElement('a', 'px-8 py-3 bg-white text-black rounded-full font-medium hover:bg-gray-200 transition-all transform hover:scale-105', 'View Projects');
-    btnPrimary.href = '#projects';
-    
-    const btnSecondary = createElement('a', 'px-8 py-3 border border-white/20 text-white rounded-full font-medium hover:bg-white/10 transition-all', 'Contact Me');
+
+    const p = createElement('p', 'text-xl md:text-2xl text-gray-400 mb-8 max-w-2xl mx-auto font-light reveal fade-up', portfolioData.personal.tagline);
+
+    const btnContainer = createElement('div', 'flex flex-col sm:flex-row justify-center gap-4 reveal fade-up');
+    const btnPrimary = createElement('a', 'magnetic px-8 py-3 bg-white text-black rounded-full font-medium hover:bg-gray-200 transition-all transform hover:scale-105', 'View Experience');
+    btnPrimary.href = '#experience';
+
+    const btnSecondary = createElement('a', 'magnetic px-8 py-3 border border-white/20 text-white rounded-full font-medium hover:bg-white/10 transition-all', 'Contact Me');
     btnSecondary.href = '#contact';
 
     btnContainer.appendChild(btnPrimary);
     btnContainer.appendChild(btnSecondary);
-    
+
+    const metrics = createElement('div', 'impact-grid reveal fade-up');
+    portfolioData.metrics.forEach((metric) => {
+        const card = createElement('div', 'impact-card tilt-card');
+        card.appendChild(createElement('span', 'impact-value', metric.value));
+        card.appendChild(createElement('span', 'impact-label', metric.label));
+        metrics.appendChild(card);
+    });
+
+    const cue = createElement('a', 'scroll-cue', 'Scroll');
+    cue.href = '#about';
+
+    container.appendChild(eyebrow);
     container.appendChild(h1);
     container.appendChild(p);
     container.appendChild(btnContainer);
+    container.appendChild(metrics);
+    container.appendChild(cue);
     section.appendChild(container);
-    
+
     return section;
 };
 
@@ -150,7 +170,7 @@ const renderAbout = () => {
     
     container.appendChild(renderSectionTitle('About Me'));
     
-    const content = createElement('div', 'max-w-3xl mx-auto text-center text-gray-400 text-lg leading-relaxed border border-white/10 p-8 rounded-2xl bg-white/5 backdrop-blur-sm hover:border-blue-500/30 transition-colors duration-500 reveal slide-left');
+    const content = createElement('div', 'spotlight-card max-w-3xl mx-auto text-center text-gray-400 text-lg leading-relaxed border border-white/10 p-8 rounded-2xl bg-white/5 backdrop-blur-sm hover:border-blue-500/30 transition-colors duration-500 reveal slide-left');
     content.textContent = portfolioData.about;
     
     container.appendChild(content);
@@ -169,7 +189,7 @@ const renderSkills = () => {
     const grid = createElement('div', 'grid grid-cols-1 md:grid-cols-3 gap-8');
     
     portfolioData.skills.forEach((category, index) => {
-        const card = createElement('div', 'p-6 rounded-2xl bg-white/5 border border-white/10 hover:border-blue-500/50 transition-all duration-300 group reveal fade-up');
+        const card = createElement('div', 'tilt-card spotlight-card p-6 rounded-2xl bg-white/5 border border-white/10 hover:border-blue-500/50 transition-all duration-300 group reveal fade-up');
         card.style.transitionDelay = `${index * 100}ms`;
         const title = createElement('h3', 'text-xl font-semibold mb-4 text-blue-400 group-hover:text-blue-300', category.category);
         const list = createElement('div', 'flex flex-wrap gap-2');
@@ -200,7 +220,7 @@ const renderExperience = () => {
     const list = createElement('div', 'max-w-4xl mx-auto space-y-8');
 
     portfolioData.experience.forEach((role, index) => {
-        const card = createElement('article', 'p-8 rounded-3xl bg-white/5 border border-white/10 hover:border-blue-500/50 transition-all duration-300 reveal fade-up');
+        const card = createElement('article', 'experience-card spotlight-card tilt-card p-8 rounded-3xl bg-white/5 border border-white/10 hover:border-blue-500/50 transition-all duration-300 reveal fade-up');
         card.style.transitionDelay = `${index * 100}ms`;
 
         const top = createElement('div', 'flex flex-col md:flex-row md:items-start md:justify-between gap-3 mb-5');
@@ -210,7 +230,7 @@ const renderExperience = () => {
         top.appendChild(titleBlock);
         top.appendChild(createElement('span', 'text-sm text-gray-400 md:text-right', role.period));
 
-        const bullets = createElement('ul', 'space-y-3 text-gray-300 leading-relaxed');
+        const bullets = createElement('ul', 'timeline-list space-y-3 text-gray-300 leading-relaxed');
         role.highlights.forEach((highlight) => {
             const item = createElement('li', 'flex gap-3');
             item.innerHTML = `<span class="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-blue-400"></span><span>${highlight}</span>`;
@@ -239,11 +259,7 @@ const renderProjects = () => {
     
     portfolioData.projects.forEach((project, index) => {
         const animationClass = index % 2 === 0 ? 'slide-left' : 'slide-right';
-        const card = createElement('div', `group relative p-8 rounded-3xl bg-gradient-to-b from-white/10 to-transparent border border-white/10 hover:border-purple-500/50 transition-all duration-500 overflow-hidden reveal ${animationClass}`);
-        
-        // Hover Glow
-        const glow = createElement('div', 'absolute inset-0 bg-purple-600/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-xl -z-10');
-        card.appendChild(glow);
+        const card = createElement('div', `tilt-card spotlight-card group relative p-8 rounded-3xl bg-gradient-to-b from-white/10 to-transparent border border-white/10 hover:border-purple-500/50 transition-all duration-500 overflow-hidden reveal ${animationClass}`);
 
         const title = createElement('h3', 'text-2xl font-bold mb-3 text-white', project.title);
         const desc = createElement('p', 'text-gray-400 mb-6 leading-relaxed', project.description);
@@ -253,8 +269,8 @@ const renderProjects = () => {
             techStack.appendChild(createElement('span', 'text-xs font-mono text-purple-400 border border-purple-500/30 px-2 py-1 rounded', t));
         });
         
-        const linkText = project.linkText || 'View Code →';
-        const link = createElement('a', 'inline-flex items-center text-white font-medium hover:text-purple-400 transition-colors', linkText);
+        const linkText = project.linkText || 'View Code ->';
+        const link = createElement('a', 'magnetic inline-flex items-center text-white font-medium hover:text-purple-400 transition-colors', linkText);
         link.href = project.link;
         link.target = '_blank';
         
@@ -386,6 +402,126 @@ const renderFooter = () => {
     return footer;
 };
 
+// Loader
+const initLoader = () => {
+    const loader = document.getElementById('page-loader');
+    if (!loader) return;
+    setTimeout(() => {
+        loader.classList.add('is-hidden');
+    }, 650);
+};
+
+// Animated Background
+const initStarfield = () => {
+    const canvas = document.getElementById('starfield');
+    if (!canvas || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const ctx = canvas.getContext('2d');
+    const colors = ['#60a5fa', '#a855f7', '#ffffff', '#38bdf8'];
+    let width = 0;
+    let height = 0;
+    let stars = [];
+
+    const resize = () => {
+        width = canvas.width = window.innerWidth;
+        height = canvas.height = window.innerHeight;
+        stars = Array.from({ length: Math.min(140, Math.floor(width / 9)) }, () => ({
+            x: Math.random() * width,
+            y: Math.random() * height,
+            radius: Math.random() * 1.8 + 0.35,
+            speed: Math.random() * 0.35 + 0.08,
+            alpha: Math.random() * 0.7 + 0.25,
+            color: colors[Math.floor(Math.random() * colors.length)],
+        }));
+    };
+
+    const draw = () => {
+        ctx.clearRect(0, 0, width, height);
+        stars.forEach((star) => {
+            star.y += star.speed;
+            if (star.y > height + 4) {
+                star.y = -4;
+                star.x = Math.random() * width;
+            }
+            ctx.globalAlpha = star.alpha;
+            ctx.fillStyle = star.color;
+            ctx.beginPath();
+            ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+            ctx.fill();
+        });
+        ctx.globalAlpha = 1;
+        requestAnimationFrame(draw);
+    };
+
+    resize();
+    draw();
+    window.addEventListener('resize', resize);
+};
+
+// Scroll Progress
+const initScrollProgress = () => {
+    const bar = document.getElementById('scroll-progress');
+    if (!bar) return;
+    const update = () => {
+        const scrollable = document.documentElement.scrollHeight - window.innerHeight;
+        const percent = scrollable > 0 ? (window.scrollY / scrollable) * 100 : 0;
+        bar.style.width = `${percent}%`;
+    };
+    update();
+    window.addEventListener('scroll', update, { passive: true });
+};
+
+// Active Navigation
+const initActiveNav = () => {
+    const links = [...document.querySelectorAll('.nav-link')];
+    const sections = links
+        .map((link) => document.querySelector(link.getAttribute('href')))
+        .filter(Boolean);
+    if (!sections.length) return;
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+            if (!entry.isIntersecting) return;
+            links.forEach((link) => {
+                link.classList.toggle('is-active', link.getAttribute('href') === `#${entry.target.id}`);
+            });
+        });
+    }, { rootMargin: '-35% 0px -55% 0px', threshold: 0.01 });
+
+    sections.forEach((section) => observer.observe(section));
+};
+
+// Magnetic Buttons
+const initMagneticElements = () => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    document.querySelectorAll('.magnetic').forEach((element) => {
+        element.addEventListener('mousemove', (event) => {
+            const rect = element.getBoundingClientRect();
+            const x = event.clientX - rect.left - rect.width / 2;
+            const y = event.clientY - rect.top - rect.height / 2;
+            element.style.transform = `translate(${x * 0.12}px, ${y * 0.18}px)`;
+        });
+        element.addEventListener('mouseleave', () => {
+            element.style.transform = '';
+        });
+    });
+};
+
+// Card Tilt
+const initTiltCards = () => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    document.querySelectorAll('.tilt-card').forEach((card) => {
+        card.addEventListener('mousemove', (event) => {
+            const rect = card.getBoundingClientRect();
+            const x = (event.clientX - rect.left) / rect.width - 0.5;
+            const y = (event.clientY - rect.top) / rect.height - 0.5;
+            card.style.transform = `perspective(900px) rotateX(${y * -4}deg) rotateY(${x * 5}deg) translateY(-4px)`;
+        });
+        card.addEventListener('mouseleave', () => {
+            card.style.transform = '';
+        });
+    });
+};
+
 // Initialize
 const init = () => {
     app.appendChild(renderHeader());
@@ -443,6 +579,12 @@ const initScrollAnimations = () => {
 
 document.addEventListener('DOMContentLoaded', () => {
     init();
+    initLoader();
+    initStarfield();
+    initScrollProgress();
     initCursor();
     initScrollAnimations();
+    initActiveNav();
+    initMagneticElements();
+    initTiltCards();
 });

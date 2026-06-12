@@ -2,7 +2,7 @@ const portfolioData = {
     personal: {
         name: "Vaduvanathan P",
         role: "Software Engineer",
-        tagline: "Building the future with Code & Cloud.",
+        tagline: "Building production tools, upload systems, and real-world applications.",
         social: {
             linkedin: "https://www.linkedin.com/in/vaduvanathan-periyasamy-11908927b",
             github: "https://github.com/vaduvanathan",
@@ -10,11 +10,26 @@ const portfolioData = {
             phone: "tel:+917305410425"
         }
     },
-    about: "A passionate software engineer with hands-on experience in developing secure blockchain-based voting systems and cloud-integrated school management systems. Proficient in Java, C++, SQL, and AWS, with a strong foundation in data structures and algorithms.",
+    about: "Software Engineer with hands-on experience in production admin dashboards, upload systems, desktop apps, API integrations, and embedded/IoT projects. Skilled in C/C++, Python, TypeScript, React Native, SQL, debugging, and building reliable real-world software systems.",
     skills: [
-        { category: "Languages", items: ["Java", "C++", "SQL", "JavaScript"] },
-        { category: "Core", items: ["Data Structures", "Algorithms", "OOPS", "DBMS"] },
-        { category: "Tools & Cloud", items: ["AWS", "Git/GitHub", "MySQL", "Ganache", "Firebase"] }
+        { category: "Languages", items: ["C", "C++", "Java", "Python", "TypeScript", "SQL"] },
+        { category: "Development", items: ["React Native", "JavaScript", "HTML", "CSS", "Windows Apps", "macOS Apps"] },
+        { category: "Tools & Backend", items: ["REST APIs", "PostgreSQL", "Supabase", "Git/GitHub", "Admin Dashboards", "API Integrations"] }
+    ],
+    experience: [
+        {
+            title: "Software Engineer",
+            company: "Build.AI / Magic Hat",
+            period: "Jun 2026",
+            location: "Remote",
+            highlights: [
+                "Built upload validation to stop inactive videos before processing, saving about 7,600 upload hours.",
+                "Integrated Shiprocket API for logistics and helped send 18K+ Magic Hat devices.",
+                "Built on-device file hashing to detect duplicate videos without firmware changes.",
+                "Built and improved Magic Hat desktop upload apps for Windows and macOS.",
+                "Built admin dashboard workflows for 50K+ users."
+            ]
+        }
     ],
     projects: [
         {
@@ -24,23 +39,11 @@ const portfolioData = {
             link: "https://github.com/vaduvanathan/IoT-Based_Flood_Monitoring_Prevention_System"
         },
         {
-            title: "School Management System",
-            description: "Built a school management system streamlining admin tasks by 25%. Added modules for student records and fee management.",
-            tech: ["Java", "MySQL", "Cloud Deployment"],
-            link: "https://github.com/vaduvanathan/school-management-system"
-        },
-        {
-            title: "Ticketchain – Web3 Ticketing System",
+            title: "Ticketchain - Web3 Ticketing System",
             description: "Decentralized ticketing system where users earn/lose credit scores based on attendance. Features early/late arrival scoring and rating-based bonuses.",
             tech: ["Solidity", "Supabase", "Render", "Web3.js"],
             link: "https://ticketchain-plo6.onrender.com/home.html",
-            linkText: "Live Project →"
-        },
-        {
-            title: "Online Voting System Using Blockchain",
-            description: "Developed a secure voting system using blockchain technology to ensure transparency and prevent fraud.",
-            tech: ["Blockchain", "Solidity", "Metamask"],
-            link: "#"
+            linkText: "Live Project ->"
         }
     ],
     education: [
@@ -48,7 +51,7 @@ const portfolioData = {
             degree: "B.E. Computer Science",
             institution: "Vels Institute Of Science And Technology",
             year: "2021 - 2025",
-            score: "CGPA: 7.91/10"
+            score: "CGPA: 7.73/10"
         },
         {
             degree: "HSC & SSLC",
@@ -86,8 +89,8 @@ const renderHeader = () => {
     const logo = createElement('a', 'text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-600 cursor-pointer', 'VP.');
     logo.href = '#';
     
-    const ul = createElement('ul', 'hidden md:flex space-x-8');
-    ['About', 'Skills', 'Projects', 'Education', 'Resume', 'Contact'].forEach(item => {
+    const ul = createElement('ul', 'hidden md:flex space-x-5 lg:space-x-8');
+    ['About', 'Skills', 'Experience', 'Projects', 'Education', 'Resume', 'Contact'].forEach(item => {
         const li = createElement('li');
         const a = createElement('a', 'text-sm font-medium text-gray-400 hover:text-white transition-colors duration-300', item);
         a.href = `#${item.toLowerCase()}`;
@@ -182,6 +185,44 @@ const renderSkills = () => {
     });
     
     container.appendChild(grid);
+    section.appendChild(container);
+    return section;
+};
+
+// Render Experience
+const renderExperience = () => {
+    const section = createElement('section', 'py-20', '');
+    section.id = 'experience';
+    const container = createElement('div', 'container mx-auto px-6');
+
+    container.appendChild(renderSectionTitle('Experience'));
+
+    const list = createElement('div', 'max-w-4xl mx-auto space-y-8');
+
+    portfolioData.experience.forEach((role, index) => {
+        const card = createElement('article', 'p-8 rounded-3xl bg-white/5 border border-white/10 hover:border-blue-500/50 transition-all duration-300 reveal fade-up');
+        card.style.transitionDelay = `${index * 100}ms`;
+
+        const top = createElement('div', 'flex flex-col md:flex-row md:items-start md:justify-between gap-3 mb-5');
+        const titleBlock = createElement('div');
+        titleBlock.appendChild(createElement('h3', 'text-2xl font-bold text-white', role.title));
+        titleBlock.appendChild(createElement('p', 'text-blue-400 font-medium mt-1', `${role.company} - ${role.location}`));
+        top.appendChild(titleBlock);
+        top.appendChild(createElement('span', 'text-sm text-gray-400 md:text-right', role.period));
+
+        const bullets = createElement('ul', 'space-y-3 text-gray-300 leading-relaxed');
+        role.highlights.forEach((highlight) => {
+            const item = createElement('li', 'flex gap-3');
+            item.innerHTML = `<span class="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-blue-400"></span><span>${highlight}</span>`;
+            bullets.appendChild(item);
+        });
+
+        card.appendChild(top);
+        card.appendChild(bullets);
+        list.appendChild(card);
+    });
+
+    container.appendChild(list);
     section.appendChild(container);
     return section;
 };
@@ -351,6 +392,7 @@ const init = () => {
     app.appendChild(renderHero());
     app.appendChild(renderAbout());
     app.appendChild(renderSkills());
+    app.appendChild(renderExperience());
     app.appendChild(renderProjects());
     app.appendChild(renderEducation());
     app.appendChild(renderResume());

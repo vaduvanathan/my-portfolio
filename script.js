@@ -162,13 +162,8 @@ const renderHero = () => {
     panel.dataset.signal = 'FIRMWARE';
     panel.innerHTML = `
         <div class="system-panel-top">
-            <span>Live Engineering Surface</span>
+            <span>Build.AI telemetry</span>
             <span>Robotics / Data / AI</span>
-        </div>
-        <div class="system-core" aria-hidden="true">
-            <span class="core-ring ring-one"></span>
-            <span class="core-ring ring-two"></span>
-            <span class="core-node"></span>
         </div>
         <div class="system-readout">
             <div><span>Upload validation</span><strong>7.6K+ h saved</strong></div>
@@ -620,12 +615,12 @@ const initRoboticsScene = async () => {
         camera.position.set(0, 0, 8);
 
         const root = new THREE.Group();
-        root.position.set(0.8, 0, 0);
+        root.position.set(0.45, 0, 0);
         scene.add(root);
 
         const pointPositions = new Float32Array(210 * 3);
         for (let index = 0; index < 210; index += 1) {
-            pointPositions[index * 3] = 0.4 + Math.random() * 5.3;
+            pointPositions[index * 3] = -0.35 + Math.random() * 5.45;
             pointPositions[index * 3 + 1] = -2.3 + Math.random() * 4.6;
             pointPositions[index * 3 + 2] = -2.7 + Math.random() * 3.2;
         }
@@ -653,7 +648,8 @@ const initRoboticsScene = async () => {
         root.add(lines);
 
         const arm = new THREE.Group();
-        arm.position.set(2.25, -0.25, -0.35);
+        arm.position.set(1.28, -0.34, -0.28);
+        arm.scale.setScalar(1.42);
         root.add(arm);
         const jointMaterial = new THREE.MeshBasicMaterial({ color: 0xa855f7, transparent: true, opacity: 0.56, wireframe: true });
         const segmentMaterial = new THREE.MeshBasicMaterial({ color: 0x7dd3fc, transparent: true, opacity: 0.46, wireframe: true });

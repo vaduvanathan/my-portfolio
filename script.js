@@ -119,31 +119,32 @@ const renderHeader = () => {
 
 // Render Hero
 const renderHero = () => {
-    const section = createElement('section', 'hero-section min-h-screen flex items-center justify-center relative overflow-hidden pt-20');
+    const section = createElement('section', 'hero-section min-h-screen relative overflow-hidden pt-24');
     section.dataset.signal = 'SOFTWARE';
     const bgWord = createElement('div', 'hero-bg-word', 'ENGINEER');
     section.appendChild(bgWord);
 
-    const container = createElement('div', 'container mx-auto px-6 text-center z-10');
+    const container = createElement('div', 'hero-shell container mx-auto px-6 z-10');
 
+    const copy = createElement('div', 'hero-copy');
     const eyebrow = createElement('div', 'hero-eyebrow reveal fade-up', 'Software Engineer');
 
-    const h1 = createElement('h1', 'text-5xl md:text-7xl font-bold mb-6 tracking-tight reveal fade-up');
-    h1.innerHTML = `Hi, I'm <span class="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500">${portfolioData.personal.name}</span>`;
+    const h1 = createElement('h1', 'hero-title reveal fade-up');
+    h1.innerHTML = `Hi, I'm <span>${portfolioData.personal.name}</span>`;
 
-    const p = createElement('p', 'text-xl md:text-2xl text-gray-400 mb-8 max-w-2xl mx-auto font-light reveal fade-up', portfolioData.personal.tagline);
+    const p = createElement('p', 'hero-subtitle reveal fade-up', portfolioData.personal.tagline);
 
-    const btnContainer = createElement('div', 'flex flex-col sm:flex-row justify-center gap-4 reveal fade-up');
-    const btnPrimary = createElement('a', 'magnetic px-8 py-3 bg-white text-black rounded-full font-medium hover:bg-gray-200 transition-all transform hover:scale-105', 'View Experience');
+    const btnContainer = createElement('div', 'hero-actions reveal fade-up');
+    const btnPrimary = createElement('a', 'magnetic hero-primary', 'View Experience');
     btnPrimary.href = '#experience';
 
-    const btnSecondary = createElement('a', 'magnetic px-8 py-3 border border-white/20 text-white rounded-full font-medium hover:bg-white/10 transition-all', 'Contact Me');
+    const btnSecondary = createElement('a', 'magnetic hero-secondary', 'Contact Me');
     btnSecondary.href = '#contact';
 
     btnContainer.appendChild(btnPrimary);
     btnContainer.appendChild(btnSecondary);
 
-    const metrics = createElement('div', 'impact-grid reveal fade-up');
+    const metrics = createElement('div', 'impact-grid hero-metrics reveal fade-up');
     portfolioData.metrics.forEach((metric) => {
         const card = createElement('div', 'impact-card tilt-card');
         card.appendChild(createElement('span', 'impact-value', metric.value));
@@ -151,16 +152,48 @@ const renderHero = () => {
         metrics.appendChild(card);
     });
 
+    copy.appendChild(eyebrow);
+    copy.appendChild(h1);
+    copy.appendChild(p);
+    copy.appendChild(btnContainer);
+    copy.appendChild(metrics);
+
+    const panel = createElement('aside', 'hero-system-panel tilt-card reveal slide-right');
+    panel.dataset.signal = 'FIRMWARE';
+    panel.innerHTML = `
+        <div class="system-panel-top">
+            <span>Live Engineering Surface</span>
+            <span>Robotics / Data / AI</span>
+        </div>
+        <div class="system-core" aria-hidden="true">
+            <span class="core-ring ring-one"></span>
+            <span class="core-ring ring-two"></span>
+            <span class="core-node"></span>
+        </div>
+        <div class="system-readout">
+            <div><span>Upload validation</span><strong>7.6K+ h saved</strong></div>
+            <div><span>Logistics API</span><strong>18K+ devices</strong></div>
+            <div><span>Desktop intake</span><strong>Win + macOS</strong></div>
+            <div><span>Admin scale</span><strong>50K+ users</strong></div>
+        </div>
+        <div class="system-route" aria-hidden="true">
+            <span>sensor</span>
+            <i></i>
+            <span>hash</span>
+            <i></i>
+            <span>cloud</span>
+            <i></i>
+            <span>review</span>
+        </div>
+    `;
+
     const cue = createElement('a', 'scroll-cue', 'Scroll');
     cue.href = '#about';
 
-    container.appendChild(eyebrow);
-    container.appendChild(h1);
-    container.appendChild(p);
-    container.appendChild(btnContainer);
-    container.appendChild(metrics);
-    container.appendChild(cue);
+    container.appendChild(copy);
+    container.appendChild(panel);
     section.appendChild(container);
+    section.appendChild(cue);
 
     return section;
 };
@@ -480,6 +513,210 @@ const initStarfield = () => {
     window.addEventListener('resize', resize);
 };
 
+const initRoboticsSceneFallback = (canvas) => {
+    const ctx = canvas.getContext('2d');
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    let width = 0;
+    let height = 0;
+    let points = [];
+    const pointer = { x: 0, y: 0 };
+
+    const resize = () => {
+        width = window.innerWidth;
+        height = window.innerHeight;
+        canvas.width = Math.floor(width * dpr);
+        canvas.height = Math.floor(height * dpr);
+        canvas.style.width = `${width}px`;
+        canvas.style.height = `${height}px`;
+        points = Array.from({ length: Math.min(70, Math.floor(width / 18)) }, (_, index) => ({
+            x: width * 0.55 + Math.random() * width * 0.45,
+            y: Math.random() * height,
+            r: 1 + Math.random() * 2,
+            drift: 0.3 + Math.random() * 0.9,
+            phase: index * 0.37,
+        }));
+    };
+
+    const drawArm = (time) => {
+        const originX = width * 0.78 + pointer.x * 20;
+        const originY = height * 0.48 + pointer.y * 18;
+        const segments = [
+            { length: 90, angle: -0.65 + Math.sin(time * 0.0012) * 0.18 },
+            { length: 78, angle: 0.72 + Math.cos(time * 0.0014) * 0.16 },
+            { length: 54, angle: -0.38 + Math.sin(time * 0.0018) * 0.18 },
+        ];
+
+        let x = originX;
+        let y = originY;
+        ctx.strokeStyle = 'rgba(125, 211, 252, 0.42)';
+        ctx.lineWidth = 2;
+        segments.forEach((segment) => {
+            const nextX = x + Math.cos(segment.angle) * segment.length;
+            const nextY = y + Math.sin(segment.angle) * segment.length;
+            ctx.beginPath();
+            ctx.moveTo(x, y);
+            ctx.lineTo(nextX, nextY);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.arc(x, y, 8, 0, Math.PI * 2);
+            ctx.fillStyle = 'rgba(96, 165, 250, 0.22)';
+            ctx.fill();
+            ctx.strokeStyle = 'rgba(168, 85, 247, 0.40)';
+            ctx.stroke();
+            x = nextX;
+            y = nextY;
+        });
+        ctx.beginPath();
+        ctx.arc(x, y, 5, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.72)';
+        ctx.fill();
+    };
+
+    const draw = (time = 0) => {
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        ctx.clearRect(0, 0, width, height);
+        points.forEach((point, index) => {
+            point.y += point.drift;
+            if (point.y > height + 20) point.y = -20;
+            const x = point.x + Math.sin(time * 0.001 + point.phase) * 18 + pointer.x * 24;
+            const y = point.y + pointer.y * 16;
+            ctx.fillStyle = index % 5 === 0 ? 'rgba(168, 85, 247, 0.6)' : 'rgba(96, 165, 250, 0.55)';
+            ctx.beginPath();
+            ctx.arc(x, y, point.r, 0, Math.PI * 2);
+            ctx.fill();
+            if (index % 6 === 0) {
+                ctx.strokeStyle = 'rgba(96, 165, 250, 0.12)';
+                ctx.beginPath();
+                ctx.moveTo(x, y);
+                ctx.lineTo(width * 0.76, height * 0.48);
+                ctx.stroke();
+            }
+        });
+        drawArm(time);
+        requestAnimationFrame(draw);
+    };
+
+    document.addEventListener('mousemove', (event) => {
+        pointer.x = (event.clientX / window.innerWidth - 0.5) * 2;
+        pointer.y = (event.clientY / window.innerHeight - 0.5) * 2;
+    }, { passive: true });
+
+    resize();
+    draw();
+    window.addEventListener('resize', resize);
+};
+
+const initRoboticsScene = async () => {
+    const canvas = document.getElementById('robotics-scene');
+    if (!canvas || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    try {
+        const THREE = await import('https://unpkg.com/three@0.160.0/build/three.module.js');
+        const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(42, 1, 0.1, 100);
+        camera.position.set(0, 0, 8);
+
+        const root = new THREE.Group();
+        root.position.set(0.8, 0, 0);
+        scene.add(root);
+
+        const pointPositions = new Float32Array(210 * 3);
+        for (let index = 0; index < 210; index += 1) {
+            pointPositions[index * 3] = 0.4 + Math.random() * 5.3;
+            pointPositions[index * 3 + 1] = -2.3 + Math.random() * 4.6;
+            pointPositions[index * 3 + 2] = -2.7 + Math.random() * 3.2;
+        }
+        const pointGeometry = new THREE.BufferGeometry();
+        pointGeometry.setAttribute('position', new THREE.BufferAttribute(pointPositions, 3));
+        const points = new THREE.Points(
+            pointGeometry,
+            new THREE.PointsMaterial({ color: 0x7dd3fc, size: 0.024, transparent: true, opacity: 0.72 })
+        );
+        root.add(points);
+
+        const linePositions = [];
+        for (let index = 0; index < pointPositions.length - 18; index += 18) {
+            linePositions.push(
+                pointPositions[index], pointPositions[index + 1], pointPositions[index + 2],
+                pointPositions[index + 9], pointPositions[index + 10], pointPositions[index + 11]
+            );
+        }
+        const lineGeometry = new THREE.BufferGeometry();
+        lineGeometry.setAttribute('position', new THREE.Float32BufferAttribute(linePositions, 3));
+        const lines = new THREE.LineSegments(
+            lineGeometry,
+            new THREE.LineBasicMaterial({ color: 0x60a5fa, transparent: true, opacity: 0.14 })
+        );
+        root.add(lines);
+
+        const arm = new THREE.Group();
+        arm.position.set(2.25, -0.25, -0.35);
+        root.add(arm);
+        const jointMaterial = new THREE.MeshBasicMaterial({ color: 0xa855f7, transparent: true, opacity: 0.56, wireframe: true });
+        const segmentMaterial = new THREE.MeshBasicMaterial({ color: 0x7dd3fc, transparent: true, opacity: 0.46, wireframe: true });
+        const makeSegment = (length) => {
+            const segment = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.08, length, 14, 1, true), segmentMaterial);
+            segment.rotation.z = Math.PI / 2;
+            segment.position.x = length / 2;
+            return segment;
+        };
+        const makeJoint = () => new THREE.Mesh(new THREE.SphereGeometry(0.18, 18, 12), jointMaterial);
+
+        const shoulder = new THREE.Group();
+        shoulder.add(makeJoint());
+        const upper = makeSegment(1.25);
+        shoulder.add(upper);
+        const elbow = new THREE.Group();
+        elbow.position.x = 1.25;
+        elbow.add(makeJoint());
+        const forearm = makeSegment(0.95);
+        elbow.add(forearm);
+        const wrist = new THREE.Group();
+        wrist.position.x = 0.95;
+        wrist.add(makeJoint());
+        const tool = new THREE.Mesh(new THREE.TorusGeometry(0.17, 0.025, 8, 28), segmentMaterial);
+        tool.position.x = 0.32;
+        wrist.add(tool);
+        elbow.add(wrist);
+        shoulder.add(elbow);
+        arm.add(shoulder);
+
+        const pointer = { x: 0, y: 0 };
+        document.addEventListener('mousemove', (event) => {
+            pointer.x = (event.clientX / window.innerWidth - 0.5) * 2;
+            pointer.y = (event.clientY / window.innerHeight - 0.5) * 2;
+        }, { passive: true });
+
+        const resize = () => {
+            renderer.setSize(window.innerWidth, window.innerHeight, false);
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+        };
+
+        const animate = (time = 0) => {
+            const t = time * 0.001;
+            root.rotation.y = pointer.x * 0.18 + window.scrollY * 0.00016;
+            root.rotation.x = pointer.y * 0.08;
+            points.rotation.y = t * 0.055;
+            lines.rotation.y = t * 0.04;
+            shoulder.rotation.z = -0.62 + Math.sin(t * 1.2) * 0.18;
+            elbow.rotation.z = 0.82 + Math.cos(t * 1.35) * 0.16;
+            wrist.rotation.z = -0.42 + Math.sin(t * 1.8) * 0.2;
+            renderer.render(scene, camera);
+            requestAnimationFrame(animate);
+        };
+
+        resize();
+        animate();
+        window.addEventListener('resize', resize);
+    } catch (error) {
+        initRoboticsSceneFallback(canvas);
+    }
+};
+
 // Scroll Progress
 const initScrollProgress = () => {
     const bar = document.getElementById('scroll-progress');
@@ -514,6 +751,13 @@ const initActiveNav = () => {
     }, { rootMargin: '-35% 0px -55% 0px', threshold: 0.01 });
 
     sections.forEach((section) => observer.observe(section));
+    const clearHeroState = () => {
+        if (window.scrollY < window.innerHeight * 0.35) {
+            links.forEach((link) => link.classList.remove('is-active'));
+        }
+    };
+    clearHeroState();
+    window.addEventListener('scroll', clearHeroState, { passive: true });
 };
 
 // Magnetic Buttons
@@ -609,7 +853,6 @@ const initCursor = () => {
     const leaveSpark = (x, y) => {
         const spark = document.createElement('span');
         spark.className = 'cursor-spark';
-        spark.textContent = activeTheme.label;
         spark.style.left = `${x}px`;
         spark.style.top = `${y}px`;
         spark.style.setProperty('--signal-color', activeTheme.color);
@@ -658,6 +901,7 @@ document.addEventListener('DOMContentLoaded', () => {
     init();
     initLoader();
     initStarfield();
+    initRoboticsScene();
     initScrollProgress();
     initCursor();
     initScrollAnimations();

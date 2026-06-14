@@ -20,8 +20,9 @@ const portfolioData = {
         {
             title: "Software Engineer",
             company: "Build.AI / Magic Hat",
-            period: "Jun 2026",
+            period: "Jun 2026 - Jun 2026",
             location: "Remote",
+            signal: "BUILD.AI",
             highlights: [
                 "Built upload validation to stop inactive videos before processing, saving about 7,600 upload hours.",
                 "Integrated Shiprocket API for logistics and helped send 18K+ Magic Hat devices.",
@@ -42,14 +43,16 @@ const portfolioData = {
             title: "IoT-Based Flood Monitoring System",
             description: "Dual ultrasonic sensor-based flood monitoring system for subways using Blynk. Enhanced alert system using water flow sensors and buzzers.",
             tech: ["Arduino", "Blynk", "Firebase", "TensorFlow"],
-            link: "https://github.com/vaduvanathan/IoT-Based_Flood_Monitoring_Prevention_System"
+            link: "https://github.com/vaduvanathan/IoT-Based_Flood_Monitoring_Prevention_System",
+            signal: "ROBOTICS"
         },
         {
             title: "Ticketchain - Web3 Ticketing System",
             description: "Decentralized ticketing system where users earn/lose credit scores based on attendance. Features early/late arrival scoring and rating-based bonuses.",
             tech: ["Solidity", "Supabase", "Render", "Web3.js"],
             link: "https://ticketchain-plo6.onrender.com/home.html",
-            linkText: "Live Project ->"
+            linkText: "Live Project ->",
+            signal: "WEB3"
         }
     ],
     education: [
@@ -57,13 +60,17 @@ const portfolioData = {
             degree: "B.E. Computer Science",
             institution: "Vels Institute Of Science And Technology",
             year: "2021 - 2025",
-            score: "CGPA: 7.73/10"
+            score: "CGPA: 7.73/10",
+            link: "https://drive.google.com/drive/folders/1-JdPXgbVtOr160mX2sTy8G3wLf33u_cJ",
+            linkText: "View Marksheet"
         },
         {
             degree: "HSC & SSLC",
             institution: "St. Joseph's Matriculation Hr. Sec. School",
             year: "Completed 2021",
-            score: "HSC: 409 | SSLC: 398"
+            score: "HSC: 409 | SSLC: 398",
+            link: "https://drive.google.com/file/d/1-boUdLzRlw7EI8Maa0JnNMliwKAD-MdQ/view?usp=drivesdk",
+            linkText: "View Marksheet"
         }
     ],
     certifications: [
@@ -113,6 +120,7 @@ const renderHeader = () => {
 // Render Hero
 const renderHero = () => {
     const section = createElement('section', 'hero-section min-h-screen flex items-center justify-center relative overflow-hidden pt-20');
+    section.dataset.signal = 'SOFTWARE';
     const bgWord = createElement('div', 'hero-bg-word', 'ENGINEER');
     section.appendChild(bgWord);
 
@@ -190,6 +198,7 @@ const renderSkills = () => {
     
     portfolioData.skills.forEach((category, index) => {
         const card = createElement('div', 'tilt-card spotlight-card p-6 rounded-2xl bg-white/5 border border-white/10 hover:border-blue-500/50 transition-all duration-300 group reveal fade-up');
+        card.dataset.signal = category.category.toUpperCase();
         card.style.transitionDelay = `${index * 100}ms`;
         const title = createElement('h3', 'text-xl font-semibold mb-4 text-blue-400 group-hover:text-blue-300', category.category);
         const list = createElement('div', 'flex flex-wrap gap-2');
@@ -221,6 +230,7 @@ const renderExperience = () => {
 
     portfolioData.experience.forEach((role, index) => {
         const card = createElement('article', 'experience-card spotlight-card tilt-card p-8 rounded-3xl bg-white/5 border border-white/10 hover:border-blue-500/50 transition-all duration-300 reveal fade-up');
+        card.dataset.signal = role.signal || 'BUILD.AI';
         card.style.transitionDelay = `${index * 100}ms`;
 
         const top = createElement('div', 'flex flex-col md:flex-row md:items-start md:justify-between gap-3 mb-5');
@@ -260,6 +270,7 @@ const renderProjects = () => {
     portfolioData.projects.forEach((project, index) => {
         const animationClass = index % 2 === 0 ? 'slide-left' : 'slide-right';
         const card = createElement('div', `tilt-card spotlight-card group relative p-8 rounded-3xl bg-gradient-to-b from-white/10 to-transparent border border-white/10 hover:border-purple-500/50 transition-all duration-500 overflow-hidden reveal ${animationClass}`);
+        card.dataset.signal = project.signal || 'PROJECT';
 
         const title = createElement('h3', 'text-2xl font-bold mb-3 text-white', project.title);
         const desc = createElement('p', 'text-gray-400 mb-6 leading-relaxed', project.description);
@@ -300,14 +311,23 @@ const renderEducation = () => {
     const eduCol = createElement('div', 'space-y-6 reveal slide-left');
     eduCol.appendChild(createElement('h3', 'text-2xl font-bold mb-6 text-gray-200', 'Education'));
     
-    portfolioData.education.forEach(edu => {
-        const card = createElement('div', 'pl-6 border-l-2 border-blue-500/30 relative');
+    portfolioData.education.forEach((edu, index) => {
+        const card = createElement('div', 'education-card reveal slide-left pl-6 border-l-2 border-blue-500/30 relative');
+        card.dataset.signal = 'ENGINEERING';
+        card.style.transitionDelay = `${index * 120}ms`;
         const dot = createElement('div', 'absolute -left-[5px] top-2 w-2 h-2 rounded-full bg-blue-500');
         card.appendChild(dot);
         
         card.appendChild(createElement('h4', 'text-lg font-semibold text-white', edu.degree));
         card.appendChild(createElement('p', 'text-gray-400', edu.institution));
-        card.appendChild(createElement('p', 'text-sm text-gray-500 mt-1', `${edu.year} • ${edu.score}`));
+        card.appendChild(createElement('p', 'text-sm text-gray-500 mt-1', `${edu.year} - ${edu.score}`));
+        if (edu.link) {
+            const link = createElement('a', 'education-link magnetic', edu.linkText || 'View Certificate');
+            link.href = edu.link;
+            link.target = '_blank';
+            link.rel = 'noopener noreferrer';
+            card.appendChild(link);
+        }
         eduCol.appendChild(card);
     });
     
@@ -316,14 +336,16 @@ const renderEducation = () => {
     certCol.appendChild(createElement('h3', 'text-2xl font-bold mb-6 text-gray-200', 'Certifications'));
     
     const certList = createElement('ul', 'space-y-4');
-    portfolioData.certifications.forEach(cert => {
-        const li = createElement('li', 'flex items-center justify-between p-4 bg-white/5 rounded-xl border border-white/10 hover:border-blue-500/50 transition-all group');
+    portfolioData.certifications.forEach((cert, index) => {
+        const li = createElement('li', 'cert-card reveal slide-right flex items-center justify-between p-4 bg-white/5 rounded-xl border border-white/10 hover:border-blue-500/50 transition-all group');
+        li.style.transitionDelay = `${index * 90}ms`;
         
         const title = createElement('span', 'text-gray-300 font-medium group-hover:text-white transition-colors', cert.title);
         
         const link = createElement('a', 'px-4 py-2 text-xs font-bold text-blue-400 bg-blue-500/10 rounded-full border border-blue-500/20 hover:bg-blue-500 hover:text-white transition-all', 'View Certificate');
         link.href = cert.link;
         link.target = '_blank';
+        link.rel = 'noopener noreferrer';
         
         li.appendChild(title);
         li.appendChild(link);
@@ -542,17 +564,68 @@ const init = () => {
 
 // Custom Cursor Logic
 const initCursor = () => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || window.matchMedia('(pointer: coarse)').matches) return;
+    const signalThemes = [
+        { label: 'BUILD.AI', color: '#60a5fa' },
+        { label: 'SOFTWARE', color: '#93c5fd' },
+        { label: 'FIRMWARE', color: '#38bdf8' },
+        { label: 'ROBOTICS', color: '#a855f7' },
+        { label: 'WEB3', color: '#c084fc' },
+        { label: 'ENGINEERING', color: '#2dd4bf' },
+        { label: 'DEVELOPMENT', color: '#34d399' },
+        { label: 'LANGUAGES', color: '#facc15' },
+        { label: 'TOOLS & BACKEND', color: '#fb7185' },
+        { label: 'API', color: '#22c55e' },
+        { label: 'HASH', color: '#f59e0b' },
+        { label: 'IOT', color: '#14b8a6' },
+        { label: 'UPLOAD', color: '#818cf8' },
+        { label: 'SHIPROCKET', color: '#f97316' }
+    ];
+    let activeTheme = signalThemes[0];
+    let lastSparkAt = 0;
+
     const cursor = document.createElement('div');
-    cursor.className = 'fixed w-8 h-8 border border-white/30 rounded-full pointer-events-none z-[100] transition-transform duration-100 ease-out hidden md:block';
+    cursor.className = 'cursor-ring';
     document.body.appendChild(cursor);
 
     const dot = document.createElement('div');
-    dot.className = 'fixed w-1 h-1 bg-white rounded-full pointer-events-none z-[100] hidden md:block';
+    dot.className = 'cursor-dot';
     document.body.appendChild(dot);
 
+    const signal = document.createElement('div');
+    signal.className = 'cursor-signal';
+    signal.textContent = activeTheme.label;
+    document.body.appendChild(signal);
+
+    const updateSignal = (target) => {
+        const zone = target?.closest?.('[data-signal]');
+        const zoneSignal = zone?.dataset?.signal;
+        activeTheme = signalThemes.find((theme) => theme.label === zoneSignal) || activeTheme;
+        signal.textContent = activeTheme.label;
+        signal.style.setProperty('--signal-color', activeTheme.color);
+        cursor.style.setProperty('--signal-color', activeTheme.color);
+    };
+
+    const leaveSpark = (x, y) => {
+        const spark = document.createElement('span');
+        spark.className = 'cursor-spark';
+        spark.textContent = activeTheme.label;
+        spark.style.left = `${x}px`;
+        spark.style.top = `${y}px`;
+        spark.style.setProperty('--signal-color', activeTheme.color);
+        document.body.appendChild(spark);
+        window.setTimeout(() => spark.remove(), 850);
+    };
+
     document.addEventListener('mousemove', (e) => {
+        updateSignal(e.target);
         cursor.style.transform = `translate(${e.clientX - 16}px, ${e.clientY - 16}px)`;
         dot.style.transform = `translate(${e.clientX - 2}px, ${e.clientY - 2}px)`;
+        signal.style.transform = `translate(${e.clientX + 16}px, ${e.clientY + 18}px)`;
+        if (Date.now() - lastSparkAt > 110) {
+            leaveSpark(e.clientX, e.clientY);
+            lastSparkAt = Date.now();
+        }
     });
 
     document.addEventListener('mousedown', () => {

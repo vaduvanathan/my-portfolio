@@ -2,7 +2,7 @@ const portfolioData = {
     personal: {
         name: "Vaduvanathan P",
         role: "Software Engineer",
-        tagline: "Building production tools, upload systems, and real-world applications.",
+        tagline: "Building reliable real-world software applications.",
         social: {
             linkedin: "https://www.linkedin.com/in/vaduvanathan-periyasamy-11908927b",
             github: "https://github.com/vaduvanathan",
@@ -118,7 +118,7 @@ const renderHero = () => {
 
     const container = createElement('div', 'container mx-auto px-6 text-center z-10');
 
-    const eyebrow = createElement('div', 'hero-eyebrow reveal fade-up', 'Software Engineer - Production Tools - Upload Systems');
+    const eyebrow = createElement('div', 'hero-eyebrow reveal fade-up', 'Software Engineer');
 
     const h1 = createElement('h1', 'text-5xl md:text-7xl font-bold mb-6 tracking-tight reveal fade-up');
     h1.innerHTML = `Hi, I'm <span class="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500">${portfolioData.personal.name}</span>`;
@@ -360,6 +360,7 @@ const renderResume = () => {
     downloadBtn.href = "./resume.pdf";
     downloadBtn.download = "Vaduvanathan_Resume.pdf";
     downloadBtn.innerHTML = `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg> Download Resume`;
+    btnContainer.appendChild(downloadBtn);
 
     card.appendChild(iframeContainer);
     card.appendChild(btnContainer);
@@ -474,8 +475,11 @@ const initScrollProgress = () => {
 const initActiveNav = () => {
     const links = [...document.querySelectorAll('.nav-link')];
     const sections = links
-        .map((link) => document.querySelector(link.getAttribute('href')))
-        .filter(Boolean);
+        .map((link) => {
+            const href = link.getAttribute('href');
+            return href && href.startsWith('#') ? document.querySelector(href) : null;
+        })
+        .filter((section) => section instanceof Element);
     if (!sections.length) return;
 
     const observer = new IntersectionObserver((entries) => {

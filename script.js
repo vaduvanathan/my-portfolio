@@ -2,7 +2,7 @@ const portfolioData = {
     personal: {
         name: "Vaduvanathan P",
         role: "Software Engineer",
-        tagline: "Building reliable real-world software applications.",
+        tagline: "I build reliable real-world software applications and production tools that solve meaningful problems at scale.",
         social: {
             linkedin: "https://www.linkedin.com/in/vaduvanathan-periyasamy-11908927b",
             github: "https://github.com/vaduvanathan",
@@ -99,20 +99,25 @@ const renderHeader = () => {
     const header = createElement('header', 'site-header fixed w-full top-0 z-50 bg-black/80 backdrop-blur-md border-b border-white/10');
     const nav = createElement('nav', 'container mx-auto px-6 py-4 flex justify-between items-center');
     
-    const logo = createElement('a', 'text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-600 cursor-pointer', 'VP.');
+    const logo = createElement('a', 'brand-lockup cursor-pointer', '<span>VP.</span><strong>Vaduvanathan Periyasamy</strong>');
     logo.href = '#';
     
-    const ul = createElement('ul', 'hidden md:flex space-x-5 lg:space-x-8');
-    ['About', 'Skills', 'Experience', 'Projects', 'Education', 'Resume', 'Contact'].forEach(item => {
+    const navRight = createElement('div', 'hidden md:flex items-center gap-7 lg:gap-10');
+    const ul = createElement('ul', 'flex space-x-5 lg:space-x-8');
+    ['About', 'Experience', 'Projects', 'Education', 'Contact'].forEach(item => {
         const li = createElement('li');
         const a = createElement('a', 'nav-link text-sm font-medium text-gray-400 hover:text-white transition-colors duration-300', item);
         a.href = `#${item.toLowerCase()}`;
         li.appendChild(a);
         ul.appendChild(li);
     });
+    const workLink = createElement('a', 'header-work-link magnetic', '<span>View Work</span><i></i>');
+    workLink.href = '#projects';
+    navRight.appendChild(ul);
+    navRight.appendChild(workLink);
 
     nav.appendChild(logo);
-    nav.appendChild(ul);
+    nav.appendChild(navRight);
     header.appendChild(nav);
     return header;
 };
@@ -135,11 +140,12 @@ const renderHero = () => {
     const p = createElement('p', 'hero-subtitle reveal fade-up', portfolioData.personal.tagline);
 
     const btnContainer = createElement('div', 'hero-actions reveal fade-up');
-    const btnPrimary = createElement('a', 'magnetic hero-primary', 'View Experience');
-    btnPrimary.href = '#experience';
+    const btnPrimary = createElement('a', 'magnetic hero-primary', 'View My Work <span aria-hidden="true">-></span>');
+    btnPrimary.href = '#projects';
 
-    const btnSecondary = createElement('a', 'magnetic hero-secondary', 'Contact Me');
-    btnSecondary.href = '#contact';
+    const btnSecondary = createElement('a', 'magnetic hero-secondary', '<svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3v11m0 0 4-4m-4 4-4-4M5 20h14"/></svg>Download Resume');
+    btnSecondary.href = './resume.pdf';
+    btnSecondary.download = 'Vaduvanathan_Resume.pdf';
 
     btnContainer.appendChild(btnPrimary);
     btnContainer.appendChild(btnSecondary);
@@ -147,6 +153,7 @@ const renderHero = () => {
     const metrics = createElement('div', 'impact-grid hero-metrics reveal fade-up');
     portfolioData.metrics.forEach((metric) => {
         const card = createElement('div', 'impact-card tilt-card');
+        card.appendChild(createElement('i', 'metric-icon', ''));
         card.appendChild(createElement('span', 'impact-value', metric.value));
         card.appendChild(createElement('span', 'impact-label', metric.label));
         metrics.appendChild(card);
@@ -158,27 +165,28 @@ const renderHero = () => {
     copy.appendChild(btnContainer);
     copy.appendChild(metrics);
 
-    const panel = createElement('aside', 'hero-system-panel tilt-card reveal slide-right');
-    panel.dataset.signal = 'FIRMWARE';
-    panel.innerHTML = `
-        <div class="system-panel-top">
-            <span>Build.AI telemetry</span>
-            <span>Robotics / Data / AI</span>
+    const sceneOverlay = createElement('div', 'hero-scene-overlay reveal slide-right');
+    sceneOverlay.dataset.signal = 'FIRMWARE';
+    sceneOverlay.innerHTML = `
+        <div class="scene-status">
+            <span>Status</span>
+            <strong><i></i>Systems operational</strong>
         </div>
-        <div class="system-readout">
-            <div><span>Upload validation</span><strong>7.6K+ h saved</strong></div>
-            <div><span>Logistics API</span><strong>18K+ devices</strong></div>
-            <div><span>Desktop intake</span><strong>Win + macOS</strong></div>
-            <div><span>Admin scale</span><strong>50K+ users</strong></div>
+        <div class="scene-note scene-systems">
+            <span>Systems</span>
+            <p>Upload pipelines<br>Device logistics<br>Data integrity</p>
         </div>
-        <div class="system-route" aria-hidden="true">
-            <span>sensor</span>
-            <i></i>
-            <span>hash</span>
-            <i></i>
-            <span>cloud</span>
-            <i></i>
-            <span>review</span>
+        <div class="scene-note scene-flow">
+            <span>Data flow</span>
+            <p>Validation<br>Deduplication<br>Processing</p>
+        </div>
+        <div class="live-metrics">
+            <span>Live metrics</span>
+            <svg aria-hidden="true" viewBox="0 0 210 74" preserveAspectRatio="none">
+                <polyline points="0,61 12,48 24,54 37,36 49,44 62,28 75,35 88,20 102,25 116,13 130,28 145,18 160,30 174,14 188,20 210,8"></polyline>
+            </svg>
+            <strong>98.7%</strong>
+            <p>Pipeline health</p>
         </div>
     `;
 
@@ -186,8 +194,8 @@ const renderHero = () => {
     cue.href = '#about';
 
     container.appendChild(copy);
-    container.appendChild(panel);
     section.appendChild(container);
+    section.appendChild(sceneOverlay);
     section.appendChild(cue);
 
     return section;
@@ -611,80 +619,161 @@ const initRoboticsScene = async () => {
         renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
 
         const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(42, 1, 0.1, 100);
-        camera.position.set(0, 0, 8);
+        const camera = new THREE.PerspectiveCamera(39, 1, 0.1, 100);
+        camera.position.set(0, 0, 8.2);
 
         const root = new THREE.Group();
-        root.position.set(0.45, 0, 0);
+        root.position.set(0.12, 0.04, 0);
         scene.add(root);
 
-        const pointPositions = new Float32Array(210 * 3);
-        for (let index = 0; index < 210; index += 1) {
-            pointPositions[index * 3] = -0.35 + Math.random() * 5.45;
-            pointPositions[index * 3 + 1] = -2.3 + Math.random() * 4.6;
-            pointPositions[index * 3 + 2] = -2.7 + Math.random() * 3.2;
+        const cloudPositions = new Float32Array(220 * 3);
+        for (let index = 0; index < 220; index += 1) {
+            cloudPositions[index * 3] = -0.3 + Math.random() * 6.6;
+            cloudPositions[index * 3 + 1] = -2.25 + Math.random() * 4.1;
+            cloudPositions[index * 3 + 2] = -3.2 + Math.random() * 2.8;
         }
-        const pointGeometry = new THREE.BufferGeometry();
-        pointGeometry.setAttribute('position', new THREE.BufferAttribute(pointPositions, 3));
-        const points = new THREE.Points(
-            pointGeometry,
-            new THREE.PointsMaterial({ color: 0x7dd3fc, size: 0.024, transparent: true, opacity: 0.72 })
+        const cloudGeometry = new THREE.BufferGeometry();
+        cloudGeometry.setAttribute('position', new THREE.BufferAttribute(cloudPositions, 3));
+        const cloud = new THREE.Points(
+            cloudGeometry,
+            new THREE.PointsMaterial({ color: 0x7dd3fc, size: 0.018, transparent: true, opacity: 0.64 })
         );
-        root.add(points);
+        root.add(cloud);
 
-        const linePositions = [];
-        for (let index = 0; index < pointPositions.length - 18; index += 18) {
-            linePositions.push(
-                pointPositions[index], pointPositions[index + 1], pointPositions[index + 2],
-                pointPositions[index + 9], pointPositions[index + 10], pointPositions[index + 11]
-            );
+        const waveRows = 9;
+        const waveColumns = 56;
+        const wavePositions = new Float32Array(waveRows * waveColumns * 3);
+        const waveSeeds = [];
+        for (let row = 0; row < waveRows; row += 1) {
+            for (let col = 0; col < waveColumns; col += 1) {
+                const index = row * waveColumns + col;
+                const x = -1.5 + col * 0.105;
+                const z = -1.7 + row * 0.2;
+                const y = -2.05 + Math.sin(col * 0.18 + row * 0.45) * 0.16;
+                wavePositions[index * 3] = x;
+                wavePositions[index * 3 + 1] = y;
+                wavePositions[index * 3 + 2] = z;
+                waveSeeds.push({ x, y, z, row, col });
+            }
         }
-        const lineGeometry = new THREE.BufferGeometry();
-        lineGeometry.setAttribute('position', new THREE.Float32BufferAttribute(linePositions, 3));
-        const lines = new THREE.LineSegments(
-            lineGeometry,
-            new THREE.LineBasicMaterial({ color: 0x60a5fa, transparent: true, opacity: 0.14 })
+        const waveGeometry = new THREE.BufferGeometry();
+        waveGeometry.setAttribute('position', new THREE.BufferAttribute(wavePositions, 3));
+        const dataWave = new THREE.Points(
+            waveGeometry,
+            new THREE.PointsMaterial({ color: 0x3b82f6, size: 0.022, transparent: true, opacity: 0.82 })
         );
-        root.add(lines);
+        dataWave.position.set(0.55, -0.08, 0.35);
+        root.add(dataWave);
 
         const arm = new THREE.Group();
-        arm.position.set(1.28, -0.34, -0.28);
-        arm.scale.setScalar(1.42);
+        arm.position.set(1.08, -1.62, -0.34);
+        arm.scale.setScalar(1.36);
         root.add(arm);
-        const jointMaterial = new THREE.MeshBasicMaterial({ color: 0xa855f7, transparent: true, opacity: 0.56, wireframe: true });
-        const segmentMaterial = new THREE.MeshBasicMaterial({ color: 0x7dd3fc, transparent: true, opacity: 0.46, wireframe: true });
-        const makeSegment = (length) => {
-            const segment = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.08, length, 14, 1, true), segmentMaterial);
+
+        const cyanWire = new THREE.MeshBasicMaterial({ color: 0x38bdf8, transparent: true, opacity: 0.62, wireframe: true });
+        const blueWire = new THREE.MeshBasicMaterial({ color: 0x60a5fa, transparent: true, opacity: 0.56, wireframe: true });
+        const violetWire = new THREE.MeshBasicMaterial({ color: 0xa855f7, transparent: true, opacity: 0.58, wireframe: true });
+        const lineMaterial = new THREE.LineBasicMaterial({ color: 0x60a5fa, transparent: true, opacity: 0.18 });
+
+        const addJointRings = (group, radius = 0.25) => {
+            [
+                [0, 0, 0],
+                [Math.PI / 2, 0, 0],
+                [0, Math.PI / 2, 0],
+            ].forEach(([x, y, z], index) => {
+                const ring = new THREE.Mesh(new THREE.TorusGeometry(radius * (1 + index * 0.16), 0.012, 8, 40), index === 2 ? violetWire : blueWire);
+                ring.rotation.set(x, y, z);
+                group.add(ring);
+            });
+        };
+
+        const makeJoint = (radius = 0.25) => {
+            const joint = new THREE.Group();
+            joint.add(new THREE.Mesh(new THREE.SphereGeometry(radius, 18, 12), violetWire));
+            addJointRings(joint, radius * 1.15);
+            return joint;
+        };
+
+        const makeSegment = (length, radius = 0.13) => {
+            const group = new THREE.Group();
+            const segment = new THREE.Mesh(new THREE.CylinderGeometry(radius, radius * 1.04, length, 18, 4, true), cyanWire);
             segment.rotation.z = Math.PI / 2;
             segment.position.x = length / 2;
-            return segment;
+            group.add(segment);
+
+            const spineGeometry = new THREE.BufferGeometry();
+            const ribs = [];
+            for (let offset = 0.2; offset < length; offset += 0.22) {
+                ribs.push(offset, -radius * 1.25, 0, offset, radius * 1.25, 0);
+            }
+            spineGeometry.setAttribute('position', new THREE.Float32BufferAttribute(ribs, 3));
+            group.add(new THREE.LineSegments(spineGeometry, lineMaterial));
+            return group;
         };
-        const makeJoint = () => new THREE.Mesh(new THREE.SphereGeometry(0.18, 18, 12), jointMaterial);
+
+        const base = new THREE.Group();
+        base.add(new THREE.Mesh(new THREE.CylinderGeometry(0.55, 0.7, 0.28, 28, 1, true), blueWire));
+        base.children[0].rotation.x = Math.PI / 2;
+        base.add(new THREE.Mesh(new THREE.TorusGeometry(0.58, 0.02, 8, 72), violetWire));
+        arm.add(base);
 
         const shoulder = new THREE.Group();
-        shoulder.add(makeJoint());
-        const upper = makeSegment(1.25);
-        shoulder.add(upper);
+        shoulder.position.set(0, 0.22, 0);
+        shoulder.rotation.z = 1.08;
+        shoulder.add(makeJoint(0.34));
+        shoulder.add(makeSegment(1.58, 0.15));
+
         const elbow = new THREE.Group();
-        elbow.position.x = 1.25;
-        elbow.add(makeJoint());
-        const forearm = makeSegment(0.95);
-        elbow.add(forearm);
+        elbow.position.x = 1.58;
+        elbow.rotation.z = -1.02;
+        elbow.add(makeJoint(0.31));
+        elbow.add(makeSegment(1.36, 0.13));
+
         const wrist = new THREE.Group();
-        wrist.position.x = 0.95;
-        wrist.add(makeJoint());
-        const tool = new THREE.Mesh(new THREE.TorusGeometry(0.17, 0.025, 8, 28), segmentMaterial);
-        tool.position.x = 0.32;
-        wrist.add(tool);
+        wrist.position.x = 1.36;
+        wrist.rotation.z = 0.42;
+        wrist.add(makeJoint(0.22));
+        wrist.add(makeSegment(0.64, 0.08));
+
+        const gripper = new THREE.Group();
+        gripper.position.x = 0.68;
+        const palm = new THREE.Mesh(new THREE.BoxGeometry(0.22, 0.22, 0.18, 3, 3, 3), blueWire);
+        gripper.add(palm);
+
+        const makeFinger = (direction) => {
+            const finger = new THREE.Group();
+            finger.position.set(0.11, direction * 0.12, 0);
+            finger.rotation.z = direction * 0.42;
+            const knuckle = new THREE.Mesh(new THREE.CylinderGeometry(0.025, 0.025, 0.4, 10, 1, true), violetWire);
+            knuckle.rotation.z = Math.PI / 2;
+            knuckle.position.x = 0.2;
+            finger.add(knuckle);
+            const tip = new THREE.Mesh(new THREE.CylinderGeometry(0.018, 0.018, 0.28, 10, 1, true), cyanWire);
+            tip.rotation.z = Math.PI / 2;
+            tip.position.set(0.46, direction * 0.06, 0);
+            finger.add(tip);
+            return finger;
+        };
+        const upperFinger = makeFinger(1);
+        const lowerFinger = makeFinger(-1);
+        gripper.add(upperFinger);
+        gripper.add(lowerFinger);
+        wrist.add(gripper);
         elbow.add(wrist);
         shoulder.add(elbow);
         arm.add(shoulder);
 
         const pointer = { x: 0, y: 0 };
+        const scrollState = { value: 0 };
         document.addEventListener('mousemove', (event) => {
             pointer.x = (event.clientX / window.innerWidth - 0.5) * 2;
             pointer.y = (event.clientY / window.innerHeight - 0.5) * 2;
         }, { passive: true });
+        const updateScroll = () => {
+            scrollState.value = Math.min(1, window.scrollY / (window.innerHeight * 2.4));
+        };
+        updateScroll();
+        window.addEventListener('scroll', updateScroll, { passive: true });
 
         const resize = () => {
             renderer.setSize(window.innerWidth, window.innerHeight, false);
@@ -694,13 +783,26 @@ const initRoboticsScene = async () => {
 
         const animate = (time = 0) => {
             const t = time * 0.001;
-            root.rotation.y = pointer.x * 0.18 + window.scrollY * 0.00016;
-            root.rotation.x = pointer.y * 0.08;
-            points.rotation.y = t * 0.055;
-            lines.rotation.y = t * 0.04;
-            shoulder.rotation.z = -0.62 + Math.sin(t * 1.2) * 0.18;
-            elbow.rotation.z = 0.82 + Math.cos(t * 1.35) * 0.16;
-            wrist.rotation.z = -0.42 + Math.sin(t * 1.8) * 0.2;
+            const scroll = scrollState.value;
+            root.rotation.y = pointer.x * 0.08 - scroll * 0.2;
+            root.rotation.x = pointer.y * 0.045;
+            cloud.rotation.y = t * 0.038;
+            cloud.rotation.x = pointer.y * 0.025;
+            arm.position.y = -1.62 + scroll * 0.48 + Math.sin(t * 0.7) * 0.03;
+            shoulder.rotation.z = 1.05 - scroll * 0.55 + Math.sin(t * 0.8) * 0.035;
+            elbow.rotation.z = -1.02 + scroll * 0.78 + Math.cos(t * 0.95) * 0.04;
+            wrist.rotation.z = 0.42 - scroll * 0.95 + pointer.y * 0.12 + Math.sin(t * 1.3) * 0.035;
+            upperFinger.rotation.z = 0.42 + scroll * 0.2 + Math.sin(t * 1.8) * 0.025;
+            lowerFinger.rotation.z = -0.42 - scroll * 0.2 - Math.sin(t * 1.8) * 0.025;
+
+            const positions = waveGeometry.attributes.position.array;
+            waveSeeds.forEach((seed, index) => {
+                const offset = index * 3;
+                positions[offset + 1] = seed.y + Math.sin(t * 1.8 + seed.col * 0.2 + seed.row * 0.38 + scroll * 5.8) * 0.12;
+                positions[offset + 2] = seed.z + scroll * 0.36;
+            });
+            waveGeometry.attributes.position.needsUpdate = true;
+            dataWave.rotation.y = -0.18 + pointer.x * 0.025;
             renderer.render(scene, camera);
             requestAnimationFrame(animate);
         };

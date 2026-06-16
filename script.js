@@ -183,11 +183,82 @@ const renderHero = () => {
         </div>
     `;
 
+    const handVisual = createElement('div', 'robot-hand-visual reveal slide-right');
+    handVisual.dataset.signal = 'ROBOTICS';
+    handVisual.innerHTML = `
+        <svg aria-hidden="true" viewBox="0 0 760 760" role="img">
+            <defs>
+                <linearGradient id="handLine" x1="130" x2="650" y1="120" y2="640" gradientUnits="userSpaceOnUse">
+                    <stop offset="0" stop-color="#38bdf8" />
+                    <stop offset="0.54" stop-color="#60a5fa" />
+                    <stop offset="1" stop-color="#a855f7" />
+                </linearGradient>
+                <filter id="handGlow" x="-40%" y="-40%" width="180%" height="180%">
+                    <feGaussianBlur stdDeviation="3.2" result="blur" />
+                    <feColorMatrix in="blur" values="0 0 0 0 0.23 0 0 0 0 0.57 0 0 0 0 1 0 0 0 .82 0" />
+                    <feMerge>
+                        <feMergeNode />
+                        <feMergeNode in="SourceGraphic" />
+                    </feMerge>
+                </filter>
+            </defs>
+            <g class="hand-scan">
+                <path d="M86 518 C204 452 272 468 382 502 C501 540 590 503 696 420" />
+                <path d="M98 575 C232 510 329 530 454 575 C557 612 625 576 706 532" />
+            </g>
+            <g class="hand-blueprint" filter="url(#handGlow)">
+                <g class="hand-wrist">
+                    <path d="M318 585 L450 632 L412 710 L277 658 Z" />
+                    <path d="M303 620 L430 666" />
+                    <path d="M291 649 L418 695" />
+                </g>
+                <g class="hand-palm">
+                    <path d="M290 418 L402 378 L506 468 L458 604 L323 566 L250 485 Z" />
+                    <path d="M315 430 L456 589" />
+                    <path d="M384 389 L331 566" />
+                    <path d="M456 430 L285 502" />
+                    <path d="M275 468 L481 525" />
+                </g>
+                <g class="hand-finger finger-thumb">
+                    <path d="M270 485 C214 470 175 432 142 376 C128 352 126 333 140 321 C154 309 172 320 190 343 C218 377 244 396 286 407" />
+                    <circle cx="188" cy="343" r="12" />
+                    <circle cx="244" cy="396" r="10" />
+                </g>
+                <g class="hand-finger finger-index">
+                    <path d="M352 393 C347 326 348 253 364 174 C370 145 388 131 405 139 C422 147 424 169 417 199 C402 267 397 329 402 385" />
+                    <circle cx="366" cy="288" r="11" />
+                    <circle cx="392" cy="201" r="12" />
+                </g>
+                <g class="hand-finger finger-middle">
+                    <path d="M400 386 C410 310 426 226 458 137 C469 107 490 96 506 108 C522 120 518 143 506 171 C477 240 459 313 451 413" />
+                    <circle cx="440" cy="280" r="12" />
+                    <circle cx="482" cy="165" r="13" />
+                </g>
+                <g class="hand-finger finger-ring">
+                    <path d="M448 407 C491 342 532 283 586 226 C606 205 628 202 640 217 C652 232 640 252 619 272 C570 322 532 382 496 462" />
+                    <circle cx="532" cy="341" r="11" />
+                    <circle cx="602" cy="251" r="12" />
+                </g>
+                <g class="hand-finger finger-pinky">
+                    <path d="M482 456 C532 434 590 405 641 360 C662 342 683 341 695 356 C707 371 695 390 671 406 C615 444 556 480 492 514" />
+                    <circle cx="581" cy="419" r="10" />
+                    <circle cx="664" cy="379" r="11" />
+                </g>
+            </g>
+            <g class="hand-callouts">
+                <path d="M120 284 H238" />
+                <path d="M548 172 H665" />
+                <path d="M536 632 H672" />
+            </g>
+        </svg>
+    `;
+
     const cue = createElement('a', 'scroll-cue', 'Scroll');
     cue.href = '#about';
 
     container.appendChild(copy);
     section.appendChild(container);
+    section.appendChild(handVisual);
     section.appendChild(sceneOverlay);
     section.appendChild(cue);
 
@@ -196,7 +267,7 @@ const renderHero = () => {
 
 // Render Section Title
 const renderSectionTitle = (title) => {
-    return createElement('h2', 'text-3xl md:text-4xl font-bold mb-12 text-center bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-500', title);
+    return createElement('h2', 'text-3xl md:text-4xl font-bold mb-12 text-center bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-500 reveal fade-up', title);
 };
 
 // Render About
@@ -544,41 +615,6 @@ const initRoboticsSceneFallback = (canvas) => {
         }));
     };
 
-    const drawArm = (time) => {
-        const originX = width * 0.78 + pointer.x * 20;
-        const originY = height * 0.48 + pointer.y * 18;
-        const segments = [
-            { length: 90, angle: -0.65 + Math.sin(time * 0.0012) * 0.18 },
-            { length: 78, angle: 0.72 + Math.cos(time * 0.0014) * 0.16 },
-            { length: 54, angle: -0.38 + Math.sin(time * 0.0018) * 0.18 },
-        ];
-
-        let x = originX;
-        let y = originY;
-        ctx.strokeStyle = 'rgba(125, 211, 252, 0.42)';
-        ctx.lineWidth = 2;
-        segments.forEach((segment) => {
-            const nextX = x + Math.cos(segment.angle) * segment.length;
-            const nextY = y + Math.sin(segment.angle) * segment.length;
-            ctx.beginPath();
-            ctx.moveTo(x, y);
-            ctx.lineTo(nextX, nextY);
-            ctx.stroke();
-            ctx.beginPath();
-            ctx.arc(x, y, 8, 0, Math.PI * 2);
-            ctx.fillStyle = 'rgba(96, 165, 250, 0.22)';
-            ctx.fill();
-            ctx.strokeStyle = 'rgba(168, 85, 247, 0.40)';
-            ctx.stroke();
-            x = nextX;
-            y = nextY;
-        });
-        ctx.beginPath();
-        ctx.arc(x, y, 5, 0, Math.PI * 2);
-        ctx.fillStyle = 'rgba(255, 255, 255, 0.72)';
-        ctx.fill();
-    };
-
     const draw = (time = 0) => {
         ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
         ctx.clearRect(0, 0, width, height);
@@ -599,7 +635,6 @@ const initRoboticsSceneFallback = (canvas) => {
                 ctx.stroke();
             }
         });
-        drawArm(time);
         requestAnimationFrame(draw);
     };
 
@@ -669,105 +704,6 @@ const initRoboticsScene = async () => {
         dataWave.position.set(0.55, -0.08, 0.35);
         root.add(dataWave);
 
-        const cyanWire = new THREE.MeshBasicMaterial({ color: 0x38bdf8, transparent: true, opacity: 0.62, wireframe: true });
-        const blueWire = new THREE.MeshBasicMaterial({ color: 0x60a5fa, transparent: true, opacity: 0.56, wireframe: true });
-        const violetWire = new THREE.MeshBasicMaterial({ color: 0xa855f7, transparent: true, opacity: 0.58, wireframe: true });
-        const lineMaterial = new THREE.LineBasicMaterial({ color: 0x60a5fa, transparent: true, opacity: 0.18 });
-
-        const addJointRings = (group, radius = 0.25) => {
-            [
-                [0, 0, 0],
-                [Math.PI / 2, 0, 0],
-                [0, Math.PI / 2, 0],
-            ].forEach(([x, y, z], index) => {
-                const ring = new THREE.Mesh(new THREE.TorusGeometry(radius * (1 + index * 0.16), 0.012, 8, 40), index === 2 ? violetWire : blueWire);
-                ring.rotation.set(x, y, z);
-                group.add(ring);
-            });
-        };
-
-        const makeJoint = (radius = 0.25) => {
-            const joint = new THREE.Group();
-            joint.add(new THREE.Mesh(new THREE.SphereGeometry(radius, 18, 12), violetWire));
-            addJointRings(joint, radius * 1.15);
-            return joint;
-        };
-
-        const makeBone = (length, radius = 0.055, material = cyanWire) => {
-            const group = new THREE.Group();
-            const segment = new THREE.Mesh(new THREE.CylinderGeometry(radius, radius * 0.92, length, 14, 3, true), material);
-            segment.position.y = length / 2;
-            group.add(segment);
-
-            const spineGeometry = new THREE.BufferGeometry();
-            const ribs = [];
-            for (let offset = 0.12; offset < length; offset += 0.16) {
-                ribs.push(-radius * 1.35, offset, 0, radius * 1.35, offset, 0);
-            }
-            spineGeometry.setAttribute('position', new THREE.Float32BufferAttribute(ribs, 3));
-            group.add(new THREE.LineSegments(spineGeometry, lineMaterial));
-            return group;
-        };
-
-        const makeFinger = ({ x, y, z = 0, lengths, radius, spread = 0, material = cyanWire }) => {
-            const rootFinger = new THREE.Group();
-            rootFinger.position.set(x, y, z);
-            rootFinger.rotation.z = spread;
-            const joints = [];
-            let current = rootFinger;
-            lengths.forEach((length, index) => {
-                const joint = makeJoint(radius * (index === 0 ? 2.25 : 1.65));
-                current.add(joint);
-                current.add(makeBone(length, radius * (1 - index * 0.12), material));
-                const next = new THREE.Group();
-                next.position.y = length;
-                current.add(next);
-                joints.push(next);
-                current = next;
-            });
-            const tip = new THREE.Mesh(new THREE.SphereGeometry(radius * 1.75, 14, 9), material);
-            current.add(tip);
-            return { root: rootFinger, joints };
-        };
-
-        const hand = new THREE.Group();
-        hand.position.set(2.55, -0.68, -0.34);
-        hand.rotation.set(0.08, -0.22, -0.38);
-        hand.scale.setScalar(1.36);
-        root.add(hand);
-
-        const wristBase = new THREE.Group();
-        wristBase.position.set(0, -0.78, -0.02);
-        wristBase.add(new THREE.Mesh(new THREE.CylinderGeometry(0.32, 0.38, 0.62, 24, 2, true), blueWire));
-        wristBase.children[0].rotation.z = Math.PI / 2;
-        wristBase.add(new THREE.Mesh(new THREE.TorusGeometry(0.34, 0.018, 8, 44), violetWire));
-        wristBase.children[1].rotation.x = Math.PI / 2;
-        hand.add(wristBase);
-
-        const palm = new THREE.Group();
-        palm.add(new THREE.Mesh(new THREE.BoxGeometry(0.86, 1.05, 0.2, 5, 7, 2), blueWire));
-        palm.add(new THREE.Mesh(new THREE.TorusGeometry(0.5, 0.018, 8, 54), violetWire));
-        palm.children[1].scale.y = 1.18;
-        palm.children[1].rotation.x = Math.PI / 2;
-        hand.add(palm);
-
-        const metacarpalLines = new THREE.BufferGeometry();
-        const palmLines = [];
-        [-0.32, -0.12, 0.08, 0.28].forEach((x) => {
-            palmLines.push(x, -0.42, 0.11, x * 0.72, 0.48, 0.11);
-        });
-        metacarpalLines.setAttribute('position', new THREE.Float32BufferAttribute(palmLines, 3));
-        palm.add(new THREE.LineSegments(metacarpalLines, lineMaterial));
-
-        const fingers = {
-            thumb: makeFinger({ x: -0.44, y: -0.2, z: 0.02, lengths: [0.42, 0.32], radius: 0.052, spread: -1.08, material: violetWire }),
-            index: makeFinger({ x: -0.31, y: 0.52, lengths: [0.54, 0.38, 0.27], radius: 0.046, spread: -0.12 }),
-            middle: makeFinger({ x: -0.08, y: 0.56, lengths: [0.66, 0.45, 0.31], radius: 0.049, spread: -0.02 }),
-            ring: makeFinger({ x: 0.15, y: 0.52, lengths: [0.58, 0.4, 0.28], radius: 0.045, spread: 0.1 }),
-            pinky: makeFinger({ x: 0.35, y: 0.43, lengths: [0.46, 0.32, 0.22], radius: 0.038, spread: 0.22, material: violetWire }),
-        };
-        Object.values(fingers).forEach((finger) => hand.add(finger.root));
-
         const pointer = { x: 0, y: 0 };
         const scrollState = { value: 0 };
         document.addEventListener('mousemove', (event) => {
@@ -793,31 +729,6 @@ const initRoboticsScene = async () => {
             root.rotation.x = pointer.y * 0.045;
             cloud.rotation.y = t * 0.038;
             cloud.rotation.x = pointer.y * 0.025;
-            const drag = Math.sin(scroll * Math.PI * 2);
-            hand.position.y = -0.68 - scroll * 3.1 + Math.sin(t * 0.75) * 0.035;
-            hand.position.x = 2.55 + scroll * 2.2 + pointer.x * 0.08;
-            hand.rotation.z = -0.38 + scroll * 0.68 + pointer.x * 0.04;
-            hand.rotation.y = -0.22 + pointer.x * 0.08;
-            hand.rotation.x = 0.08 + pointer.y * 0.06;
-            palm.rotation.z = drag * 0.04;
-            wristBase.rotation.z = scroll * 0.36 + Math.sin(t * 0.8) * 0.035;
-
-            const curl = 0.22 + scroll * 0.88 + Math.sin(t * 1.1) * 0.04;
-            fingers.index.root.rotation.z = -0.14 + scroll * 0.18;
-            fingers.middle.root.rotation.z = -0.02 + scroll * 0.12;
-            fingers.ring.root.rotation.z = 0.1 + scroll * 0.08;
-            fingers.pinky.root.rotation.z = 0.22 + scroll * 0.04;
-            fingers.thumb.root.rotation.z = -1.08 + scroll * 0.42 + pointer.y * 0.04;
-            [fingers.index, fingers.middle, fingers.ring, fingers.pinky].forEach((finger, fingerIndex) => {
-                finger.joints.forEach((joint, jointIndex) => {
-                    joint.rotation.x = curl * (0.2 + jointIndex * 0.32) * (fingerIndex < 2 ? 0.82 : 1);
-                    joint.rotation.z = Math.sin(t * 1.4 + fingerIndex) * 0.018;
-                });
-            });
-            fingers.thumb.joints.forEach((joint, jointIndex) => {
-                joint.rotation.z = -curl * (0.22 + jointIndex * 0.2);
-                joint.rotation.x = scroll * 0.14;
-            });
 
             const positions = waveGeometry.attributes.position.array;
             waveSeeds.forEach((seed, index) => {
@@ -1002,21 +913,81 @@ const initCursor = () => {
     });
 };
 
+const initHeroHandMotion = () => {
+    const hand = document.querySelector('.robot-hand-visual');
+    if (!hand || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    const state = {
+        scroll: 0,
+        x: 0,
+        y: 0,
+        targetScroll: 0,
+        targetX: 0,
+        targetY: 0,
+    };
+
+    const updateScroll = () => {
+        state.targetScroll = Math.min(1, window.scrollY / (window.innerHeight * 1.25));
+    };
+
+    document.addEventListener('mousemove', (event) => {
+        state.targetX = (event.clientX / window.innerWidth - 0.5) * 2;
+        state.targetY = (event.clientY / window.innerHeight - 0.5) * 2;
+    }, { passive: true });
+
+    window.addEventListener('scroll', updateScroll, { passive: true });
+    updateScroll();
+
+    const animate = () => {
+        state.scroll += (state.targetScroll - state.scroll) * 0.09;
+        state.x += (state.targetX - state.x) * 0.08;
+        state.y += (state.targetY - state.y) * 0.08;
+
+        hand.style.setProperty('--hand-scroll', state.scroll.toFixed(4));
+        hand.style.setProperty('--hand-pointer-x', state.x.toFixed(4));
+        hand.style.setProperty('--hand-pointer-y', state.y.toFixed(4));
+
+        requestAnimationFrame(animate);
+    };
+
+    animate();
+};
+
 // Scroll Animations
 const initScrollAnimations = () => {
+    const elements = [...document.querySelectorAll('.reveal')];
+    elements.forEach((element, index) => {
+        if (!element.style.transitionDelay) {
+            element.style.transitionDelay = `${Math.min((index % 5) * 70, 280)}ms`;
+        }
+    });
+
+    const activateVisible = () => {
+        const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+        elements.forEach((element) => {
+            if (element.classList.contains('active')) return;
+            const rect = element.getBoundingClientRect();
+            if (rect.top < viewportHeight * 0.92 && rect.bottom > viewportHeight * 0.04) {
+                element.classList.add('active');
+            }
+        });
+    };
+
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 entry.target.classList.add('active');
+                observer.unobserve(entry.target);
             }
         });
     }, {
-        threshold: 0.1
+        rootMargin: '0px 0px -10% 0px',
+        threshold: 0.14
     });
 
-    document.querySelectorAll('.reveal').forEach(el => {
-        observer.observe(el);
-    });
+    elements.forEach((element) => observer.observe(element));
+    requestAnimationFrame(activateVisible);
+    window.addEventListener('resize', activateVisible, { passive: true });
 };
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -1026,6 +997,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initRoboticsScene();
     initScrollProgress();
     initCursor();
+    initHeroHandMotion();
     initScrollAnimations();
     initActiveNav();
     initMagneticElements();

@@ -92,7 +92,7 @@ html {
 
 #robotics-scene {
     z-index: -2;
-    opacity: 0.98;
+    opacity: 0.72;
     mix-blend-mode: screen;
 }
 
@@ -446,6 +446,131 @@ html {
 .hero-secondary:hover {
     border-color: rgba(125, 211, 252, 0.4);
     background: rgba(96, 165, 250, 0.12);
+}
+
+.robot-hand-visual {
+    --hand-scroll: 0;
+    --hand-pointer-x: 0;
+    --hand-pointer-y: 0;
+    position: absolute;
+    top: 11vh;
+    right: clamp(-1rem, 3vw, 4.5rem);
+    z-index: 0;
+    width: min(43vw, 43rem);
+    aspect-ratio: 1;
+    pointer-events: none;
+    opacity: 0.94;
+    transform:
+        translate3d(
+            calc((var(--hand-pointer-x) * 18px) + (var(--hand-scroll) * 128px)),
+            calc((var(--hand-pointer-y) * 14px) - (var(--hand-scroll) * 142px)),
+            0
+        )
+        rotate(calc(-4deg - (var(--hand-scroll) * 11deg)));
+    transform-origin: 58% 58%;
+    will-change: transform;
+}
+
+.robot-hand-visual::before {
+    content: "";
+    position: absolute;
+    inset: 10% 0 6% 8%;
+    z-index: -1;
+    border-radius: 999px;
+    background:
+        radial-gradient(circle at 62% 40%, rgba(96, 165, 250, 0.18), transparent 32%),
+        radial-gradient(circle at 74% 60%, rgba(168, 85, 247, 0.22), transparent 42%);
+    filter: blur(22px);
+}
+
+.robot-hand-visual svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+}
+
+.hand-blueprint,
+.hand-scan,
+.hand-callouts {
+    transform-box: fill-box;
+    transform-origin: center;
+}
+
+.hand-blueprint {
+    animation: hand-float 7s ease-in-out infinite alternate;
+}
+
+.hand-blueprint path,
+.hand-blueprint circle,
+.hand-callouts path {
+    fill: none;
+    stroke: url(#handLine);
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    vector-effect: non-scaling-stroke;
+}
+
+.hand-blueprint path {
+    stroke-width: 2.2;
+}
+
+.hand-blueprint circle {
+    stroke-width: 1.8;
+    opacity: 0.8;
+}
+
+.hand-palm path,
+.hand-wrist path {
+    opacity: 0.76;
+}
+
+.hand-finger {
+    transform-box: fill-box;
+    transform-origin: 50% 92%;
+    transition: transform 80ms linear;
+}
+
+.finger-thumb {
+    transform-origin: 82% 58%;
+    transform: rotate(calc(var(--hand-scroll) * 8deg));
+}
+
+.finger-index {
+    transform: rotate(calc(var(--hand-scroll) * -7deg));
+}
+
+.finger-middle {
+    transform: rotate(calc(var(--hand-scroll) * -5deg));
+}
+
+.finger-ring {
+    transform: rotate(calc(var(--hand-scroll) * 5deg));
+}
+
+.finger-pinky {
+    transform: rotate(calc(var(--hand-scroll) * 9deg));
+}
+
+.hand-scan path {
+    fill: none;
+    stroke: rgba(96, 165, 250, 0.34);
+    stroke-width: 1.8;
+    stroke-dasharray: 2 14;
+    stroke-linecap: round;
+    animation: data-river 7s linear infinite;
+}
+
+.hand-scan path:nth-child(2) {
+    stroke: rgba(168, 85, 247, 0.34);
+    animation-duration: 9s;
+    animation-direction: reverse;
+}
+
+.hand-callouts path {
+    stroke-width: 1.2;
+    opacity: 0.38;
+    stroke-dasharray: 6 8;
 }
 
 .impact-grid {
@@ -901,10 +1026,17 @@ html {
     border: 1px solid rgba(148, 163, 184, 0.14);
     border-radius: 0.9rem;
     padding: 0.95rem 2rem 0.95rem 1rem;
+    opacity: 0;
+    transform: translate3d(0, 24px, 0);
     background:
         linear-gradient(145deg, rgba(96, 165, 250, 0.11), rgba(168, 85, 247, 0.045)),
         rgba(7, 11, 20, 0.68);
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+    transition:
+        opacity 680ms cubic-bezier(0.2, 0.8, 0.2, 1),
+        transform 680ms cubic-bezier(0.2, 0.8, 0.2, 1),
+        border-color 220ms ease,
+        background 220ms ease;
 }
 
 .experience-metric::after {
@@ -926,6 +1058,23 @@ html {
     max-width: 9.5rem;
     font-size: 0.65rem;
     line-height: 1.35;
+}
+
+.experience-card.active .experience-metric {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+}
+
+.experience-card.active .experience-metric:nth-child(2) {
+    transition-delay: 90ms;
+}
+
+.experience-card.active .experience-metric:nth-child(3) {
+    transition-delay: 180ms;
+}
+
+.experience-card.active .experience-metric:nth-child(4) {
+    transition-delay: 270ms;
 }
 
 .education-card {
@@ -1059,6 +1208,21 @@ html {
     }
 }
 
+@keyframes hand-float {
+    from {
+        transform: translate3d(0, -0.4rem, 0) rotate(-0.6deg);
+    }
+    to {
+        transform: translate3d(0, 0.6rem, 0) rotate(0.9deg);
+    }
+}
+
+@keyframes data-river {
+    to {
+        stroke-dashoffset: -96;
+    }
+}
+
 @keyframes grid-drift {
     from {
         background-position: 0 0, 0 0;
@@ -1180,6 +1344,12 @@ html {
         min-height: auto;
     }
 
+    .hero-section .reveal {
+        opacity: 1;
+        filter: blur(0);
+        transform: translate3d(0, 0, 0);
+    }
+
     .hero-shell {
         padding-top: 2rem;
         gap: 2.25rem;
@@ -1201,6 +1371,11 @@ html {
         white-space: normal;
         word-break: break-word;
         overflow-wrap: anywhere;
+    }
+
+    .hero-title .title-line > span {
+        transform: none;
+        animation: none;
     }
 
     .hero-subtitle {

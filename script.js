@@ -150,20 +150,10 @@ const renderHero = () => {
     btnContainer.appendChild(btnPrimary);
     btnContainer.appendChild(btnSecondary);
 
-    const metrics = createElement('div', 'impact-grid hero-metrics reveal fade-up');
-    portfolioData.metrics.forEach((metric) => {
-        const card = createElement('div', 'impact-card tilt-card');
-        card.appendChild(createElement('i', 'metric-icon', ''));
-        card.appendChild(createElement('span', 'impact-value', metric.value));
-        card.appendChild(createElement('span', 'impact-label', metric.label));
-        metrics.appendChild(card);
-    });
-
     copy.appendChild(eyebrow);
     copy.appendChild(h1);
     copy.appendChild(p);
     copy.appendChild(btnContainer);
-    copy.appendChild(metrics);
 
     const sceneOverlay = createElement('div', 'hero-scene-overlay reveal slide-right');
     sceneOverlay.dataset.signal = 'FIRMWARE';
@@ -173,12 +163,12 @@ const renderHero = () => {
             <strong><i></i>Systems operational</strong>
         </div>
         <div class="scene-note scene-systems">
-            <span>Systems</span>
-            <p>Upload pipelines<br>Device logistics<br>Data integrity</p>
+            <span>Hand model</span>
+            <p>Scroll gesture<br>Tactile robotics<br>Data surface</p>
         </div>
         <div class="scene-note scene-flow">
-            <span>Data flow</span>
-            <p>Validation<br>Deduplication<br>Processing</p>
+            <span>Motion map</span>
+            <p>Finger curl<br>Wrist drag<br>Page control</p>
         </div>
         <div class="live-metrics">
             <span>Live metrics</span>
@@ -284,6 +274,17 @@ const renderExperience = () => {
         });
 
         card.appendChild(top);
+        if (index === 0) {
+            const metrics = createElement('div', 'experience-metrics');
+            portfolioData.metrics.forEach((metric) => {
+                const metricCard = createElement('div', 'experience-metric tilt-card');
+                metricCard.appendChild(createElement('i', 'metric-icon', ''));
+                metricCard.appendChild(createElement('span', 'impact-value', metric.value));
+                metricCard.appendChild(createElement('span', 'impact-label', metric.label));
+                metrics.appendChild(metricCard);
+            });
+            card.appendChild(metrics);
+        }
         card.appendChild(bullets);
         list.appendChild(card);
     });
@@ -665,11 +666,6 @@ const initRoboticsScene = async () => {
         dataWave.position.set(0.55, -0.08, 0.35);
         root.add(dataWave);
 
-        const arm = new THREE.Group();
-        arm.position.set(1.08, -1.62, -0.34);
-        arm.scale.setScalar(1.36);
-        root.add(arm);
-
         const cyanWire = new THREE.MeshBasicMaterial({ color: 0x38bdf8, transparent: true, opacity: 0.62, wireframe: true });
         const blueWire = new THREE.MeshBasicMaterial({ color: 0x60a5fa, transparent: true, opacity: 0.56, wireframe: true });
         const violetWire = new THREE.MeshBasicMaterial({ color: 0xa855f7, transparent: true, opacity: 0.58, wireframe: true });
@@ -694,74 +690,80 @@ const initRoboticsScene = async () => {
             return joint;
         };
 
-        const makeSegment = (length, radius = 0.13) => {
+        const makeBone = (length, radius = 0.055, material = cyanWire) => {
             const group = new THREE.Group();
-            const segment = new THREE.Mesh(new THREE.CylinderGeometry(radius, radius * 1.04, length, 18, 4, true), cyanWire);
-            segment.rotation.z = Math.PI / 2;
-            segment.position.x = length / 2;
+            const segment = new THREE.Mesh(new THREE.CylinderGeometry(radius, radius * 0.92, length, 14, 3, true), material);
+            segment.position.y = length / 2;
             group.add(segment);
 
             const spineGeometry = new THREE.BufferGeometry();
             const ribs = [];
-            for (let offset = 0.2; offset < length; offset += 0.22) {
-                ribs.push(offset, -radius * 1.25, 0, offset, radius * 1.25, 0);
+            for (let offset = 0.12; offset < length; offset += 0.16) {
+                ribs.push(-radius * 1.35, offset, 0, radius * 1.35, offset, 0);
             }
             spineGeometry.setAttribute('position', new THREE.Float32BufferAttribute(ribs, 3));
             group.add(new THREE.LineSegments(spineGeometry, lineMaterial));
             return group;
         };
 
-        const base = new THREE.Group();
-        base.add(new THREE.Mesh(new THREE.CylinderGeometry(0.55, 0.7, 0.28, 28, 1, true), blueWire));
-        base.children[0].rotation.x = Math.PI / 2;
-        base.add(new THREE.Mesh(new THREE.TorusGeometry(0.58, 0.02, 8, 72), violetWire));
-        arm.add(base);
-
-        const shoulder = new THREE.Group();
-        shoulder.position.set(0, 0.22, 0);
-        shoulder.rotation.z = 1.08;
-        shoulder.add(makeJoint(0.34));
-        shoulder.add(makeSegment(1.58, 0.15));
-
-        const elbow = new THREE.Group();
-        elbow.position.x = 1.58;
-        elbow.rotation.z = -1.02;
-        elbow.add(makeJoint(0.31));
-        elbow.add(makeSegment(1.36, 0.13));
-
-        const wrist = new THREE.Group();
-        wrist.position.x = 1.36;
-        wrist.rotation.z = 0.42;
-        wrist.add(makeJoint(0.22));
-        wrist.add(makeSegment(0.64, 0.08));
-
-        const gripper = new THREE.Group();
-        gripper.position.x = 0.68;
-        const palm = new THREE.Mesh(new THREE.BoxGeometry(0.22, 0.22, 0.18, 3, 3, 3), blueWire);
-        gripper.add(palm);
-
-        const makeFinger = (direction) => {
-            const finger = new THREE.Group();
-            finger.position.set(0.11, direction * 0.12, 0);
-            finger.rotation.z = direction * 0.42;
-            const knuckle = new THREE.Mesh(new THREE.CylinderGeometry(0.025, 0.025, 0.4, 10, 1, true), violetWire);
-            knuckle.rotation.z = Math.PI / 2;
-            knuckle.position.x = 0.2;
-            finger.add(knuckle);
-            const tip = new THREE.Mesh(new THREE.CylinderGeometry(0.018, 0.018, 0.28, 10, 1, true), cyanWire);
-            tip.rotation.z = Math.PI / 2;
-            tip.position.set(0.46, direction * 0.06, 0);
-            finger.add(tip);
-            return finger;
+        const makeFinger = ({ x, y, z = 0, lengths, radius, spread = 0, material = cyanWire }) => {
+            const rootFinger = new THREE.Group();
+            rootFinger.position.set(x, y, z);
+            rootFinger.rotation.z = spread;
+            const joints = [];
+            let current = rootFinger;
+            lengths.forEach((length, index) => {
+                const joint = makeJoint(radius * (index === 0 ? 2.25 : 1.65));
+                current.add(joint);
+                current.add(makeBone(length, radius * (1 - index * 0.12), material));
+                const next = new THREE.Group();
+                next.position.y = length;
+                current.add(next);
+                joints.push(next);
+                current = next;
+            });
+            const tip = new THREE.Mesh(new THREE.SphereGeometry(radius * 1.75, 14, 9), material);
+            current.add(tip);
+            return { root: rootFinger, joints };
         };
-        const upperFinger = makeFinger(1);
-        const lowerFinger = makeFinger(-1);
-        gripper.add(upperFinger);
-        gripper.add(lowerFinger);
-        wrist.add(gripper);
-        elbow.add(wrist);
-        shoulder.add(elbow);
-        arm.add(shoulder);
+
+        const hand = new THREE.Group();
+        hand.position.set(2.55, -0.68, -0.34);
+        hand.rotation.set(0.08, -0.22, -0.38);
+        hand.scale.setScalar(1.36);
+        root.add(hand);
+
+        const wristBase = new THREE.Group();
+        wristBase.position.set(0, -0.78, -0.02);
+        wristBase.add(new THREE.Mesh(new THREE.CylinderGeometry(0.32, 0.38, 0.62, 24, 2, true), blueWire));
+        wristBase.children[0].rotation.z = Math.PI / 2;
+        wristBase.add(new THREE.Mesh(new THREE.TorusGeometry(0.34, 0.018, 8, 44), violetWire));
+        wristBase.children[1].rotation.x = Math.PI / 2;
+        hand.add(wristBase);
+
+        const palm = new THREE.Group();
+        palm.add(new THREE.Mesh(new THREE.BoxGeometry(0.86, 1.05, 0.2, 5, 7, 2), blueWire));
+        palm.add(new THREE.Mesh(new THREE.TorusGeometry(0.5, 0.018, 8, 54), violetWire));
+        palm.children[1].scale.y = 1.18;
+        palm.children[1].rotation.x = Math.PI / 2;
+        hand.add(palm);
+
+        const metacarpalLines = new THREE.BufferGeometry();
+        const palmLines = [];
+        [-0.32, -0.12, 0.08, 0.28].forEach((x) => {
+            palmLines.push(x, -0.42, 0.11, x * 0.72, 0.48, 0.11);
+        });
+        metacarpalLines.setAttribute('position', new THREE.Float32BufferAttribute(palmLines, 3));
+        palm.add(new THREE.LineSegments(metacarpalLines, lineMaterial));
+
+        const fingers = {
+            thumb: makeFinger({ x: -0.44, y: -0.2, z: 0.02, lengths: [0.42, 0.32], radius: 0.052, spread: -1.08, material: violetWire }),
+            index: makeFinger({ x: -0.31, y: 0.52, lengths: [0.54, 0.38, 0.27], radius: 0.046, spread: -0.12 }),
+            middle: makeFinger({ x: -0.08, y: 0.56, lengths: [0.66, 0.45, 0.31], radius: 0.049, spread: -0.02 }),
+            ring: makeFinger({ x: 0.15, y: 0.52, lengths: [0.58, 0.4, 0.28], radius: 0.045, spread: 0.1 }),
+            pinky: makeFinger({ x: 0.35, y: 0.43, lengths: [0.46, 0.32, 0.22], radius: 0.038, spread: 0.22, material: violetWire }),
+        };
+        Object.values(fingers).forEach((finger) => hand.add(finger.root));
 
         const pointer = { x: 0, y: 0 };
         const scrollState = { value: 0 };
@@ -788,12 +790,31 @@ const initRoboticsScene = async () => {
             root.rotation.x = pointer.y * 0.045;
             cloud.rotation.y = t * 0.038;
             cloud.rotation.x = pointer.y * 0.025;
-            arm.position.y = -1.62 + scroll * 0.48 + Math.sin(t * 0.7) * 0.03;
-            shoulder.rotation.z = 1.05 - scroll * 0.55 + Math.sin(t * 0.8) * 0.035;
-            elbow.rotation.z = -1.02 + scroll * 0.78 + Math.cos(t * 0.95) * 0.04;
-            wrist.rotation.z = 0.42 - scroll * 0.95 + pointer.y * 0.12 + Math.sin(t * 1.3) * 0.035;
-            upperFinger.rotation.z = 0.42 + scroll * 0.2 + Math.sin(t * 1.8) * 0.025;
-            lowerFinger.rotation.z = -0.42 - scroll * 0.2 - Math.sin(t * 1.8) * 0.025;
+            const drag = Math.sin(scroll * Math.PI * 2);
+            hand.position.y = -0.68 - scroll * 3.1 + Math.sin(t * 0.75) * 0.035;
+            hand.position.x = 2.55 + scroll * 2.2 + pointer.x * 0.08;
+            hand.rotation.z = -0.38 + scroll * 0.68 + pointer.x * 0.04;
+            hand.rotation.y = -0.22 + pointer.x * 0.08;
+            hand.rotation.x = 0.08 + pointer.y * 0.06;
+            palm.rotation.z = drag * 0.04;
+            wristBase.rotation.z = scroll * 0.36 + Math.sin(t * 0.8) * 0.035;
+
+            const curl = 0.22 + scroll * 0.88 + Math.sin(t * 1.1) * 0.04;
+            fingers.index.root.rotation.z = -0.14 + scroll * 0.18;
+            fingers.middle.root.rotation.z = -0.02 + scroll * 0.12;
+            fingers.ring.root.rotation.z = 0.1 + scroll * 0.08;
+            fingers.pinky.root.rotation.z = 0.22 + scroll * 0.04;
+            fingers.thumb.root.rotation.z = -1.08 + scroll * 0.42 + pointer.y * 0.04;
+            [fingers.index, fingers.middle, fingers.ring, fingers.pinky].forEach((finger, fingerIndex) => {
+                finger.joints.forEach((joint, jointIndex) => {
+                    joint.rotation.x = curl * (0.2 + jointIndex * 0.32) * (fingerIndex < 2 ? 0.82 : 1);
+                    joint.rotation.z = Math.sin(t * 1.4 + fingerIndex) * 0.018;
+                });
+            });
+            fingers.thumb.joints.forEach((joint, jointIndex) => {
+                joint.rotation.z = -curl * (0.22 + jointIndex * 0.2);
+                joint.rotation.x = scroll * 0.14;
+            });
 
             const positions = waveGeometry.attributes.position.array;
             waveSeeds.forEach((seed, index) => {

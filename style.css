@@ -448,129 +448,263 @@ html {
     background: rgba(96, 165, 250, 0.12);
 }
 
-.robot-hand-visual {
-    --hand-scroll: 0;
-    --hand-pointer-x: 0;
-    --hand-pointer-y: 0;
+.robotics-rig-visual {
+    --rig-scroll: 0;
+    --rig-pointer-x: 0;
+    --rig-pointer-y: 0;
     position: absolute;
-    top: 11vh;
-    right: clamp(-1rem, 3vw, 4.5rem);
+    top: 5.25rem;
+    right: clamp(-4rem, 2vw, 2.75rem);
     z-index: 0;
-    width: min(43vw, 43rem);
-    aspect-ratio: 1;
+    width: min(56vw, 52rem);
+    min-width: 39rem;
+    aspect-ratio: 1.18;
     pointer-events: none;
-    opacity: 0.94;
+    opacity: 0.82;
     transform:
         translate3d(
-            calc((var(--hand-pointer-x) * 18px) + (var(--hand-scroll) * 128px)),
-            calc((var(--hand-pointer-y) * 14px) - (var(--hand-scroll) * 142px)),
+            calc((var(--rig-pointer-x) * 20px) + (var(--rig-scroll) * 105px)),
+            calc((var(--rig-pointer-y) * 14px) - (var(--rig-scroll) * 138px)),
             0
         )
-        rotate(calc(-4deg - (var(--hand-scroll) * 11deg)));
-    transform-origin: 58% 58%;
+        rotate(calc(-2.4deg - (var(--rig-scroll) * 7deg)))
+        scale(calc(1 - (var(--rig-scroll) * 0.045)));
+    transform-origin: 64% 66%;
     will-change: transform;
 }
 
-.robot-hand-visual::before {
+.rig-enter {
+    animation: rig-enter 1100ms cubic-bezier(0.16, 1, 0.3, 1) 380ms both;
+}
+
+.robotics-rig-visual::before {
     content: "";
     position: absolute;
-    inset: 10% 0 6% 8%;
+    inset: 2% -8% -1% 4%;
     z-index: -1;
     border-radius: 999px;
     background:
-        radial-gradient(circle at 62% 40%, rgba(96, 165, 250, 0.18), transparent 32%),
-        radial-gradient(circle at 74% 60%, rgba(168, 85, 247, 0.22), transparent 42%);
-    filter: blur(22px);
+        radial-gradient(circle at 64% 34%, rgba(96, 165, 250, 0.12), transparent 32%),
+        radial-gradient(circle at 70% 70%, rgba(168, 85, 247, 0.20), transparent 48%),
+        radial-gradient(circle at 36% 62%, rgba(45, 212, 191, 0.09), transparent 36%);
+    filter: blur(42px);
 }
 
-.robot-hand-visual svg {
+.rig-field {
+    position: absolute;
+    inset: 11% 0 1% 3%;
+    border-radius: 50%;
+    background:
+        linear-gradient(rgba(96, 165, 250, 0.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(96, 165, 250, 0.08) 1px, transparent 1px);
+    background-size: 38px 38px;
+    mask-image: radial-gradient(circle at 60% 56%, #000 0 48%, transparent 73%);
+    opacity: 0.42;
+    transform:
+        rotate(calc(var(--rig-scroll) * -11deg))
+        translate3d(calc(var(--rig-pointer-x) * -10px), calc(var(--rig-pointer-y) * -7px), 0);
+}
+
+.rig-svg {
     display: block;
+    position: relative;
     width: 100%;
     height: 100%;
     overflow: visible;
 }
 
-.hand-blueprint,
-.hand-scan,
-.hand-callouts {
+.rig-armature,
+.rig-data-stream,
+.rig-measure {
     transform-box: fill-box;
     transform-origin: center;
 }
 
-.hand-blueprint {
-    animation: hand-float 7s ease-in-out infinite alternate;
+.rig-armature {
+    transform:
+        translate3d(calc(var(--rig-pointer-x) * 8px), calc(var(--rig-pointer-y) * 6px), 0)
+        rotate(calc(var(--rig-scroll) * -6deg));
+    animation: rig-breathe 8s ease-in-out infinite alternate;
 }
 
-.hand-blueprint path,
-.hand-blueprint circle,
-.hand-callouts path {
+.rig-armature path,
+.rig-armature circle,
+.rig-armature ellipse,
+.rig-measure path {
     fill: none;
-    stroke: url(#handLine);
+    stroke: url(#rigStroke);
     stroke-linecap: round;
     stroke-linejoin: round;
     vector-effect: non-scaling-stroke;
 }
 
-.hand-blueprint path {
-    stroke-width: 2.2;
+.rig-base {
+    stroke-width: 1.5;
+    opacity: 0.55;
 }
 
-.hand-blueprint circle {
-    stroke-width: 1.8;
-    opacity: 0.8;
+.rig-base-inner {
+    opacity: 0.34;
 }
 
-.hand-palm path,
-.hand-wrist path {
-    opacity: 0.76;
+.rig-shell {
+    stroke-width: 1.9;
+    opacity: 0.82;
 }
 
-.hand-finger {
+.rig-mesh,
+.rig-centerline,
+.rig-joint path {
+    stroke-width: 0.9;
+    opacity: 0.36;
+}
+
+.rig-centerline {
+    stroke-dasharray: 8 9;
+    opacity: 0.44;
+}
+
+.rig-joint circle {
+    stroke-width: 1.25;
+    opacity: 0.72;
+}
+
+.rig-joint circle:nth-child(2) {
+    opacity: 0.38;
+}
+
+.rig-joint circle:nth-child(3) {
+    opacity: 0.9;
+    fill: rgba(96, 165, 250, 0.08);
+}
+
+.joint-elbow {
+    transform:
+        translate3d(calc(var(--rig-scroll) * -6px), calc(var(--rig-scroll) * 10px), 0)
+        rotate(calc(var(--rig-scroll) * 8deg));
     transform-box: fill-box;
-    transform-origin: 50% 92%;
-    transition: transform 80ms linear;
+    transform-origin: center;
 }
 
-.finger-thumb {
-    transform-origin: 82% 58%;
-    transform: rotate(calc(var(--hand-scroll) * 8deg));
+.joint-wrist,
+.rig-tool {
+    transform:
+        translate3d(calc(var(--rig-scroll) * 10px), calc(var(--rig-scroll) * -12px), 0)
+        rotate(calc(var(--rig-scroll) * -12deg));
+    transform-box: fill-box;
+    transform-origin: center;
 }
 
-.finger-index {
-    transform: rotate(calc(var(--hand-scroll) * -7deg));
-}
-
-.finger-middle {
-    transform: rotate(calc(var(--hand-scroll) * -5deg));
-}
-
-.finger-ring {
-    transform: rotate(calc(var(--hand-scroll) * 5deg));
-}
-
-.finger-pinky {
-    transform: rotate(calc(var(--hand-scroll) * 9deg));
-}
-
-.hand-scan path {
+.rig-data-stream path {
     fill: none;
-    stroke: rgba(96, 165, 250, 0.34);
-    stroke-width: 1.8;
-    stroke-dasharray: 2 14;
+    stroke: rgba(96, 165, 250, 0.28);
+    stroke-width: 1.25;
+    stroke-dasharray: 1 12;
     stroke-linecap: round;
-    animation: data-river 7s linear infinite;
+    animation: rig-stream 8s linear infinite;
 }
 
-.hand-scan path:nth-child(2) {
+.rig-data-stream path:nth-child(2) {
     stroke: rgba(168, 85, 247, 0.34);
-    animation-duration: 9s;
+    animation-duration: 10s;
     animation-direction: reverse;
 }
 
-.hand-callouts path {
-    stroke-width: 1.2;
-    opacity: 0.38;
+.rig-data-stream path:nth-child(3) {
+    stroke: rgba(45, 212, 191, 0.24);
+    animation-duration: 12s;
+}
+
+.rig-data-stream path:nth-child(4) {
+    stroke: rgba(148, 163, 184, 0.16);
+    animation-duration: 14s;
+    animation-direction: reverse;
+}
+
+.rig-measure path {
+    stroke-width: 0.9;
+    opacity: 0.32;
     stroke-dasharray: 6 8;
+}
+
+.rig-label,
+.rig-metric-panel {
+    position: absolute;
+    z-index: 2;
+    border: 1px solid rgba(96, 165, 250, 0.16);
+    border-radius: 0.85rem;
+    background: rgba(3, 7, 18, 0.52);
+    box-shadow: 0 16px 60px rgba(2, 6, 23, 0.34);
+    backdrop-filter: blur(14px);
+}
+
+.rig-label {
+    display: grid;
+    gap: 0.25rem;
+    min-width: 10.5rem;
+    padding: 0.85rem 1rem;
+    color: rgba(226, 232, 240, 0.68);
+    font-size: 0.68rem;
+    line-height: 1.3;
+}
+
+.rig-label span,
+.rig-metric-panel span {
+    color: #93c5fd;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.64rem;
+    font-weight: 800;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+}
+
+.rig-label b {
+    font-weight: 600;
+}
+
+.label-systems {
+    top: 18%;
+    left: 5%;
+    transform: translate3d(calc(var(--rig-pointer-x) * -8px), calc(var(--rig-scroll) * 18px), 0);
+}
+
+.label-flow {
+    right: 1%;
+    bottom: 15%;
+    transform: translate3d(calc(var(--rig-pointer-x) * 10px), calc(var(--rig-scroll) * -16px), 0);
+}
+
+.rig-metric-panel {
+    right: 5%;
+    top: 6%;
+    width: 12rem;
+    padding: 0.9rem 1rem 0.8rem;
+}
+
+.rig-metric-panel i {
+    display: block;
+    height: 2.4rem;
+    margin: 0.7rem 0 0.3rem;
+    background:
+        linear-gradient(135deg, transparent 0 9%, #60a5fa 10% 11%, transparent 12% 20%, #a855f7 21% 22%, transparent 23% 31%, #60a5fa 32% 33%, transparent 34% 42%, #a855f7 43% 44%, transparent 45%),
+        linear-gradient(180deg, rgba(96, 165, 250, 0.08), transparent);
+    background-size: 130% 100%, 100% 100%;
+    border-bottom: 1px solid rgba(96, 165, 250, 0.26);
+    animation: rig-chart 5s linear infinite;
+}
+
+.rig-metric-panel b {
+    display: block;
+    color: #93c5fd;
+    font-size: 1.05rem;
+    text-align: right;
+}
+
+.rig-metric-panel p {
+    margin: 0;
+    color: rgba(203, 213, 225, 0.48);
+    font-size: 0.68rem;
+    text-align: right;
 }
 
 .impact-grid {
@@ -1157,18 +1291,15 @@ html {
 /* Animations */
 .reveal {
     opacity: 0;
-    filter: blur(12px);
     transition:
         opacity 900ms cubic-bezier(0.2, 0.8, 0.2, 1),
-        transform 900ms cubic-bezier(0.2, 0.8, 0.2, 1),
-        filter 900ms cubic-bezier(0.2, 0.8, 0.2, 1);
+        transform 900ms cubic-bezier(0.2, 0.8, 0.2, 1);
     will-change: transform, opacity;
 }
 
 .reveal.active {
     opacity: 1;
     transform: translate(0, 0);
-    filter: blur(0);
 }
 
 .slide-left {
@@ -1208,18 +1339,34 @@ html {
     }
 }
 
-@keyframes hand-float {
+@keyframes rig-breathe {
     from {
-        transform: translate3d(0, -0.4rem, 0) rotate(-0.6deg);
+        filter: drop-shadow(0 0 16px rgba(96, 165, 250, 0.12));
     }
     to {
-        transform: translate3d(0, 0.6rem, 0) rotate(0.9deg);
+        filter: drop-shadow(0 0 28px rgba(168, 85, 247, 0.18));
     }
 }
 
-@keyframes data-river {
+@keyframes rig-enter {
+    from {
+        opacity: 0;
+        transform:
+            translate3d(96px, 34px, 0)
+            rotate(-4deg)
+            scale(0.97);
+    }
+}
+
+@keyframes rig-stream {
     to {
         stroke-dashoffset: -96;
+    }
+}
+
+@keyframes rig-chart {
+    to {
+        background-position: -130% 0, 0 0;
     }
 }
 
@@ -1312,6 +1459,13 @@ html {
     .hero-title {
         max-width: 10ch;
     }
+
+    .robotics-rig-visual {
+        right: -9rem;
+        width: min(70vw, 42rem);
+        min-width: 31rem;
+        opacity: 0.42;
+    }
 }
 
 @media (max-height: 760px) and (min-width: 901px) {
@@ -1336,6 +1490,11 @@ html {
     .experience-metrics {
         grid-template-columns: repeat(2, minmax(0, 1fr));
     }
+
+    .robotics-rig-visual {
+        right: -13rem;
+        opacity: 0.26;
+    }
 }
 
 @media (max-width: 640px) {
@@ -1346,7 +1505,6 @@ html {
 
     .hero-section .reveal {
         opacity: 1;
-        filter: blur(0);
         transform: translate3d(0, 0, 0);
     }
 
@@ -1387,6 +1545,10 @@ html {
     .hero-actions {
         flex-direction: column;
         align-items: stretch;
+    }
+
+    .robotics-rig-visual {
+        display: none;
     }
 
     .hero-eyebrow {

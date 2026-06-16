@@ -165,92 +165,98 @@ const renderHero = () => {
             <span>Status</span>
             <strong><i></i>Systems operational</strong>
         </div>
-        <div class="scene-note scene-systems">
-            <span>Hand model</span>
-            <p>Scroll gesture<br>Tactile robotics<br>Data surface</p>
-        </div>
-        <div class="scene-note scene-flow">
-            <span>Motion map</span>
-            <p>Finger curl<br>Wrist drag<br>Page control</p>
-        </div>
-        <div class="live-metrics">
-            <span>Live metrics</span>
-            <svg aria-hidden="true" viewBox="0 0 210 74" preserveAspectRatio="none">
-                <polyline points="0,61 12,48 24,54 37,36 49,44 62,28 75,35 88,20 102,25 116,13 130,28 145,18 160,30 174,14 188,20 210,8"></polyline>
-            </svg>
-            <strong>98.7%</strong>
-            <p>Pipeline health</p>
-        </div>
     `;
 
-    const handVisual = createElement('div', 'robot-hand-visual reveal slide-right');
-    handVisual.dataset.signal = 'ROBOTICS';
-    handVisual.innerHTML = `
-        <svg aria-hidden="true" viewBox="0 0 760 760" role="img">
+    const rigVisual = createElement('div', 'robotics-rig-visual rig-enter');
+    rigVisual.dataset.signal = 'ROBOTICS';
+    rigVisual.innerHTML = `
+        <div class="rig-field" aria-hidden="true"></div>
+        <svg class="rig-svg" aria-hidden="true" viewBox="0 0 900 760" role="img">
             <defs>
-                <linearGradient id="handLine" x1="130" x2="650" y1="120" y2="640" gradientUnits="userSpaceOnUse">
+                <linearGradient id="rigStroke" x1="140" x2="760" y1="96" y2="660" gradientUnits="userSpaceOnUse">
                     <stop offset="0" stop-color="#38bdf8" />
-                    <stop offset="0.54" stop-color="#60a5fa" />
+                    <stop offset="0.48" stop-color="#60a5fa" />
                     <stop offset="1" stop-color="#a855f7" />
                 </linearGradient>
-                <filter id="handGlow" x="-40%" y="-40%" width="180%" height="180%">
-                    <feGaussianBlur stdDeviation="3.2" result="blur" />
-                    <feColorMatrix in="blur" values="0 0 0 0 0.23 0 0 0 0 0.57 0 0 0 0 1 0 0 0 .82 0" />
+                <filter id="rigGlow" x="-40%" y="-40%" width="180%" height="180%">
+                    <feGaussianBlur stdDeviation="1.8" result="blur" />
+                    <feColorMatrix in="blur" values="0 0 0 0 0.22 0 0 0 0 0.58 0 0 0 0 1 0 0 0 .58 0" />
                     <feMerge>
                         <feMergeNode />
                         <feMergeNode in="SourceGraphic" />
                     </feMerge>
                 </filter>
             </defs>
-            <g class="hand-scan">
-                <path d="M86 518 C204 452 272 468 382 502 C501 540 590 503 696 420" />
-                <path d="M98 575 C232 510 329 530 454 575 C557 612 625 576 706 532" />
+            <g class="rig-data-stream">
+                <path d="M40 552 C202 438 326 474 462 534 C612 600 720 510 860 394" />
+                <path d="M64 650 C248 550 386 608 542 646 C678 680 750 622 874 548" />
+                <path d="M152 250 C306 188 438 228 552 292 C686 368 760 326 868 266" />
+                <path d="M30 438 C184 382 318 396 454 444 C594 492 714 454 856 346" />
             </g>
-            <g class="hand-blueprint" filter="url(#handGlow)">
-                <g class="hand-wrist">
-                    <path d="M318 585 L450 632 L412 710 L277 658 Z" />
-                    <path d="M303 620 L430 666" />
-                    <path d="M291 649 L418 695" />
+            <g class="rig-armature" filter="url(#rigGlow)">
+                <ellipse class="rig-base" cx="586" cy="675" rx="172" ry="36" />
+                <ellipse class="rig-base rig-base-inner" cx="586" cy="650" rx="112" ry="22" />
+                <path class="rig-shell" d="M430 616 H690 L734 674 H384 Z" />
+                <path class="rig-mesh" d="M442 625 L714 662 M482 616 L526 681 M558 616 L604 684 M634 616 L684 674" />
+
+                <g class="rig-joint joint-base">
+                    <circle cx="586" cy="560" r="92" />
+                    <circle cx="586" cy="560" r="62" />
+                    <circle cx="586" cy="560" r="30" />
+                    <path d="M496 560 H676 M586 468 V652 M522 496 L650 624 M650 496 L522 624" />
                 </g>
-                <g class="hand-palm">
-                    <path d="M290 418 L402 378 L506 468 L458 604 L323 566 L250 485 Z" />
-                    <path d="M315 430 L456 589" />
-                    <path d="M384 389 L331 566" />
-                    <path d="M456 430 L285 502" />
-                    <path d="M275 468 L481 525" />
+
+                <g class="rig-link link-lower">
+                    <path class="rig-shell" d="M560 502 C516 434 478 365 430 268 L470 246 C526 344 566 418 618 490 Z" />
+                    <path class="rig-mesh" d="M468 286 L604 492 M488 326 L576 300 M508 366 L596 338 M528 406 L614 382 M548 446 L630 428" />
+                    <path class="rig-centerline" d="M588 494 C536 416 500 340 450 256" />
                 </g>
-                <g class="hand-finger finger-thumb">
-                    <path d="M270 485 C214 470 175 432 142 376 C128 352 126 333 140 321 C154 309 172 320 190 343 C218 377 244 396 286 407" />
-                    <circle cx="188" cy="343" r="12" />
-                    <circle cx="244" cy="396" r="10" />
+
+                <g class="rig-joint joint-elbow">
+                    <circle cx="450" cy="256" r="72" />
+                    <circle cx="450" cy="256" r="48" />
+                    <circle cx="450" cy="256" r="21" />
+                    <path d="M378 256 H522 M450 184 V328 M398 205 L502 307 M502 205 L398 307" />
                 </g>
-                <g class="hand-finger finger-index">
-                    <path d="M352 393 C347 326 348 253 364 174 C370 145 388 131 405 139 C422 147 424 169 417 199 C402 267 397 329 402 385" />
-                    <circle cx="366" cy="288" r="11" />
-                    <circle cx="392" cy="201" r="12" />
+
+                <g class="rig-link link-upper">
+                    <path class="rig-shell" d="M505 218 C596 174 684 142 782 104 L804 152 C704 190 620 224 532 270 Z" />
+                    <path class="rig-mesh" d="M532 232 L793 124 M574 212 L604 252 M626 190 L656 232 M682 168 L710 210 M738 146 L764 184" />
+                    <path class="rig-centerline" d="M516 244 C616 194 698 164 794 128" />
                 </g>
-                <g class="hand-finger finger-middle">
-                    <path d="M400 386 C410 310 426 226 458 137 C469 107 490 96 506 108 C522 120 518 143 506 171 C477 240 459 313 451 413" />
-                    <circle cx="440" cy="280" r="12" />
-                    <circle cx="482" cy="165" r="13" />
+
+                <g class="rig-joint joint-wrist">
+                    <circle cx="792" cy="128" r="54" />
+                    <circle cx="792" cy="128" r="34" />
+                    <circle cx="792" cy="128" r="15" />
+                    <path d="M738 128 H846 M792 74 V182 M756 92 L828 164 M828 92 L756 164" />
                 </g>
-                <g class="hand-finger finger-ring">
-                    <path d="M448 407 C491 342 532 283 586 226 C606 205 628 202 640 217 C652 232 640 252 619 272 C570 322 532 382 496 462" />
-                    <circle cx="532" cy="341" r="11" />
-                    <circle cx="602" cy="251" r="12" />
-                </g>
-                <g class="hand-finger finger-pinky">
-                    <path d="M482 456 C532 434 590 405 641 360 C662 342 683 341 695 356 C707 371 695 390 671 406 C615 444 556 480 492 514" />
-                    <circle cx="581" cy="419" r="10" />
-                    <circle cx="664" cy="379" r="11" />
+
+                <g class="rig-tool">
+                    <path class="rig-shell" d="M824 148 L876 178 L864 214 L806 180 Z" />
+                    <path class="rig-shell" d="M846 180 L886 224 M858 190 L820 236" />
+                    <path class="rig-mesh" d="M830 160 L866 204 M850 164 L814 198 M864 176 L830 220" />
                 </g>
             </g>
-            <g class="hand-callouts">
-                <path d="M120 284 H238" />
-                <path d="M548 172 H665" />
-                <path d="M536 632 H672" />
+            <g class="rig-measure">
+                <path d="M124 326 H302 V446" />
+                <path d="M646 86 H766" />
+                <path d="M248 638 H362" />
+                <path d="M130 326 V536 H272" />
             </g>
         </svg>
+        <div class="rig-label label-systems">
+            <span>Systems</span>
+            <b>Upload pipelines</b>
+            <b>Device logistics</b>
+            <b>Data review</b>
+        </div>
+        <div class="rig-label label-flow">
+            <span>Data flow</span>
+            <b>Validate</b>
+            <b>Deduplicate</b>
+            <b>Ship</b>
+        </div>
     `;
 
     const cue = createElement('a', 'scroll-cue', 'Scroll');
@@ -258,7 +264,7 @@ const renderHero = () => {
 
     container.appendChild(copy);
     section.appendChild(container);
-    section.appendChild(handVisual);
+    section.appendChild(rigVisual);
     section.appendChild(sceneOverlay);
     section.appendChild(cue);
 
@@ -913,9 +919,9 @@ const initCursor = () => {
     });
 };
 
-const initHeroHandMotion = () => {
-    const hand = document.querySelector('.robot-hand-visual');
-    if (!hand || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+const initHeroRigMotion = () => {
+    const rig = document.querySelector('.robotics-rig-visual');
+    if (!rig || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
     const state = {
         scroll: 0,
@@ -943,9 +949,9 @@ const initHeroHandMotion = () => {
         state.x += (state.targetX - state.x) * 0.08;
         state.y += (state.targetY - state.y) * 0.08;
 
-        hand.style.setProperty('--hand-scroll', state.scroll.toFixed(4));
-        hand.style.setProperty('--hand-pointer-x', state.x.toFixed(4));
-        hand.style.setProperty('--hand-pointer-y', state.y.toFixed(4));
+        rig.style.setProperty('--rig-scroll', state.scroll.toFixed(4));
+        rig.style.setProperty('--rig-pointer-x', state.x.toFixed(4));
+        rig.style.setProperty('--rig-pointer-y', state.y.toFixed(4));
 
         requestAnimationFrame(animate);
     };
@@ -987,6 +993,9 @@ const initScrollAnimations = () => {
 
     elements.forEach((element) => observer.observe(element));
     requestAnimationFrame(activateVisible);
+    setTimeout(activateVisible, 180);
+    setTimeout(activateVisible, 700);
+    window.addEventListener('scroll', activateVisible, { passive: true });
     window.addEventListener('resize', activateVisible, { passive: true });
 };
 
@@ -997,7 +1006,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initRoboticsScene();
     initScrollProgress();
     initCursor();
-    initHeroHandMotion();
+    initHeroRigMotion();
     initScrollAnimations();
     initActiveNav();
     initMagneticElements();

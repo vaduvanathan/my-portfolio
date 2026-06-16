@@ -135,7 +135,10 @@ const renderHero = () => {
     const eyebrow = createElement('div', 'hero-eyebrow reveal fade-up', 'Software Engineer');
 
     const h1 = createElement('h1', 'hero-title reveal fade-up');
-    h1.innerHTML = `Hi, I'm <span>${portfolioData.personal.name}</span>`;
+    h1.innerHTML = `
+        <span class="title-line"><span>Hi, I'm</span></span>
+        <span class="title-line title-name"><span>${portfolioData.personal.name}</span></span>
+    `;
 
     const p = createElement('p', 'hero-subtitle reveal fade-up', portfolioData.personal.tagline);
 

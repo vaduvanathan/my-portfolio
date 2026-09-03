@@ -19,15 +19,15 @@ const portfolioData = {
     experience: [
         {
             title: "Software Engineer",
-            company: "Build.AI / Magic Hat",
+            company: "Product Engineering Team",
             period: "Jun 2026 - Jun 2026",
             location: "Remote",
-            signal: "BUILD.AI",
+            signal: "PLATFORM",
             highlights: [
                 "Built upload validation to stop inactive videos before processing, saving about 7,600 upload hours.",
-                "Integrated Shiprocket API for logistics and helped send 18K+ Magic Hat devices.",
+                "Integrated Shiprocket API for logistics and helped ship 18K+ connected devices.",
                 "Built on-device file hashing to detect duplicate videos without firmware changes.",
-                "Built and improved Magic Hat desktop upload apps for Windows and macOS.",
+                "Built and improved cross-platform desktop uploader apps for Windows and macOS.",
                 "Built admin dashboard workflows for 50K+ users."
             ]
         }
@@ -98,13 +98,14 @@ const createElement = (tag, classes = '', content = '') => {
 const renderHeader = () => {
     const header = createElement('header', 'site-header fixed w-full top-0 z-50 bg-black/80 backdrop-blur-md border-b border-white/10');
     const nav = createElement('nav', 'container mx-auto px-6 py-4 flex justify-between items-center');
+    nav.setAttribute('aria-label', 'Primary navigation');
     
     const logo = createElement('a', 'brand-lockup cursor-pointer', '<span>VP.</span><strong>Vaduvanathan Periyasamy</strong>');
     logo.href = '#';
     
     const navRight = createElement('div', 'hidden md:flex items-center gap-7 lg:gap-10');
     const ul = createElement('ul', 'flex space-x-5 lg:space-x-8');
-    ['About', 'Experience', 'Projects', 'Education', 'Contact'].forEach(item => {
+    ['About', 'Skills', 'Experience', 'Projects', 'Education', 'Contact'].forEach(item => {
         const li = createElement('li');
         const a = createElement('a', 'nav-link text-sm font-medium text-gray-400 hover:text-white transition-colors duration-300', item);
         a.href = `#${item.toLowerCase()}`;
@@ -116,9 +117,36 @@ const renderHeader = () => {
     navRight.appendChild(ul);
     navRight.appendChild(workLink);
 
+    const menuButton = createElement('button', 'mobile-menu-toggle', '<span></span><span></span><span></span>');
+    menuButton.type = 'button';
+    menuButton.setAttribute('aria-label', 'Open navigation');
+    menuButton.setAttribute('aria-expanded', 'false');
+    menuButton.setAttribute('aria-controls', 'mobile-nav');
+
+    const mobileNav = createElement('div', 'mobile-nav');
+    mobileNav.id = 'mobile-nav';
+    ['About', 'Skills', 'Experience', 'Projects', 'Education', 'Contact'].forEach(item => {
+        const link = createElement('a', 'mobile-nav-link', item);
+        link.href = `#${item.toLowerCase()}`;
+        link.addEventListener('click', () => {
+            mobileNav.classList.remove('is-open');
+            menuButton.setAttribute('aria-expanded', 'false');
+            menuButton.setAttribute('aria-label', 'Open navigation');
+        });
+        mobileNav.appendChild(link);
+    });
+
+    menuButton.addEventListener('click', () => {
+        const isOpen = mobileNav.classList.toggle('is-open');
+        menuButton.setAttribute('aria-expanded', String(isOpen));
+        menuButton.setAttribute('aria-label', isOpen ? 'Close navigation' : 'Open navigation');
+    });
+
     nav.appendChild(logo);
     nav.appendChild(navRight);
+    nav.appendChild(menuButton);
     header.appendChild(nav);
+    header.appendChild(mobileNav);
     return header;
 };
 
@@ -174,9 +202,9 @@ const renderHero = () => {
         <svg class="rig-svg" aria-hidden="true" viewBox="0 0 900 760" role="img">
             <defs>
                 <linearGradient id="rigStroke" x1="140" x2="760" y1="96" y2="660" gradientUnits="userSpaceOnUse">
-                    <stop offset="0" stop-color="#38bdf8" />
-                    <stop offset="0.48" stop-color="#60a5fa" />
-                    <stop offset="1" stop-color="#a855f7" />
+                    <stop offset="0" stop-color="#b8ff6a" />
+                    <stop offset="0.48" stop-color="#70e1c0" />
+                    <stop offset="1" stop-color="#f6b95f" />
                 </linearGradient>
                 <filter id="rigGlow" x="-40%" y="-40%" width="180%" height="180%">
                     <feGaussianBlur stdDeviation="1.8" result="blur" />
@@ -336,7 +364,7 @@ const renderExperience = () => {
 
     portfolioData.experience.forEach((role, index) => {
         const card = createElement('article', 'experience-card spotlight-card tilt-card p-8 rounded-3xl bg-white/5 border border-white/10 hover:border-blue-500/50 transition-all duration-300 reveal fade-up');
-        card.dataset.signal = role.signal || 'BUILD.AI';
+        card.dataset.signal = role.signal || 'PLATFORM';
         card.style.transitionDelay = `${index * 100}ms`;
 
         const top = createElement('div', 'flex flex-col md:flex-row md:items-start md:justify-between gap-3 mb-5');
@@ -394,7 +422,7 @@ const renderProjects = () => {
         
         const techStack = createElement('div', 'flex flex-wrap gap-2 mb-6');
         project.tech.forEach(t => {
-            techStack.appendChild(createElement('span', 'text-xs font-mono text-purple-400 border border-purple-500/30 px-2 py-1 rounded', t));
+            techStack.appendChild(createElement('span', 'project-tech text-xs font-mono px-2 py-1 rounded', t));
         });
         
         const linkText = project.linkText || 'View Code ->';
@@ -556,7 +584,7 @@ const initStarfield = () => {
     const canvas = document.getElementById('starfield');
     if (!canvas || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     const ctx = canvas.getContext('2d');
-    const colors = ['#60a5fa', '#a855f7', '#ffffff', '#38bdf8'];
+    const colors = ['#b8ff6a', '#70e1c0', '#ffffff', '#f6b95f'];
     let width = 0;
     let height = 0;
     let stars = [];
@@ -629,12 +657,12 @@ const initRoboticsSceneFallback = (canvas) => {
             if (point.y > height + 20) point.y = -20;
             const x = point.x + Math.sin(time * 0.001 + point.phase) * 18 + pointer.x * 24;
             const y = point.y + pointer.y * 16;
-            ctx.fillStyle = index % 5 === 0 ? 'rgba(168, 85, 247, 0.6)' : 'rgba(96, 165, 250, 0.55)';
+            ctx.fillStyle = index % 5 === 0 ? 'rgba(246, 185, 95, 0.6)' : 'rgba(184, 255, 106, 0.55)';
             ctx.beginPath();
             ctx.arc(x, y, point.r, 0, Math.PI * 2);
             ctx.fill();
             if (index % 6 === 0) {
-                ctx.strokeStyle = 'rgba(96, 165, 250, 0.12)';
+                ctx.strokeStyle = 'rgba(112, 225, 192, 0.14)';
                 ctx.beginPath();
                 ctx.moveTo(x, y);
                 ctx.lineTo(width * 0.76, height * 0.48);
@@ -681,7 +709,7 @@ const initRoboticsScene = async () => {
         cloudGeometry.setAttribute('position', new THREE.BufferAttribute(cloudPositions, 3));
         const cloud = new THREE.Points(
             cloudGeometry,
-            new THREE.PointsMaterial({ color: 0x7dd3fc, size: 0.018, transparent: true, opacity: 0.64 })
+            new THREE.PointsMaterial({ color: 0xb8ff6a, size: 0.018, transparent: true, opacity: 0.64 })
         );
         root.add(cloud);
 
@@ -705,7 +733,7 @@ const initRoboticsScene = async () => {
         waveGeometry.setAttribute('position', new THREE.BufferAttribute(wavePositions, 3));
         const dataWave = new THREE.Points(
             waveGeometry,
-            new THREE.PointsMaterial({ color: 0x3b82f6, size: 0.022, transparent: true, opacity: 0.82 })
+            new THREE.PointsMaterial({ color: 0x70e1c0, size: 0.022, transparent: true, opacity: 0.82 })
         );
         dataWave.position.set(0.55, -0.08, 0.35);
         root.add(dataWave);
@@ -833,15 +861,17 @@ const initTiltCards = () => {
 
 // Initialize
 const init = () => {
+    const main = createElement('main');
+    main.appendChild(renderHero());
+    main.appendChild(renderAbout());
+    main.appendChild(renderSkills());
+    main.appendChild(renderExperience());
+    main.appendChild(renderProjects());
+    main.appendChild(renderEducation());
+    main.appendChild(renderResume());
+    main.appendChild(renderContact());
     app.appendChild(renderHeader());
-    app.appendChild(renderHero());
-    app.appendChild(renderAbout());
-    app.appendChild(renderSkills());
-    app.appendChild(renderExperience());
-    app.appendChild(renderProjects());
-    app.appendChild(renderEducation());
-    app.appendChild(renderResume());
-    app.appendChild(renderContact());
+    app.appendChild(main);
     app.appendChild(renderFooter());
 };
 
@@ -849,11 +879,11 @@ const init = () => {
 const initCursor = () => {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || window.matchMedia('(pointer: coarse)').matches) return;
     const signalThemes = [
-        { label: 'BUILD.AI', color: '#60a5fa' },
-        { label: 'SOFTWARE', color: '#93c5fd' },
-        { label: 'FIRMWARE', color: '#38bdf8' },
-        { label: 'ROBOTICS', color: '#a855f7' },
-        { label: 'WEB3', color: '#c084fc' },
+        { label: 'PLATFORM', color: '#b8ff6a' },
+        { label: 'SOFTWARE', color: '#70e1c0' },
+        { label: 'FIRMWARE', color: '#f6b95f' },
+        { label: 'ROBOTICS', color: '#d9ef68' },
+        { label: 'WEB3', color: '#ff9b70' },
         { label: 'ENGINEERING', color: '#2dd4bf' },
         { label: 'DEVELOPMENT', color: '#34d399' },
         { label: 'LANGUAGES', color: '#facc15' },

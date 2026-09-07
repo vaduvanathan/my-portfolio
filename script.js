@@ -6,7 +6,7 @@ const portfolioData = {
         social: {
             linkedin: "https://www.linkedin.com/in/vaduvanathan-periyasamy-11908927b",
             github: "https://github.com/vaduvanathan",
-            email: "mailto:praveenvaduvanathan@gmail.com",
+            email: "mailto:vaduvanathan@kinemor.com",
             phone: "tel:+917305410425"
         }
     },

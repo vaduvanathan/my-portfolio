@@ -539,14 +539,104 @@ const renderResume = () => {
 
 // Render Contact
 const renderContact = () => {
-    const section = createElement('section', 'py-20 relative overflow-hidden', '');
+    const section = createElement('section', 'contact-section py-20 relative overflow-hidden', '');
     section.id = 'contact';
     
-    const container = createElement('div', 'container mx-auto px-6 text-center relative z-10');
+    const container = createElement('div', 'container mx-auto px-6 relative z-10');
     
-    container.appendChild(renderSectionTitle('Get In Touch'));
+    const intro = createElement('div', 'contact-intro');
+    intro.appendChild(renderSectionTitle('Request a pilot unit'));
     
-    const p = createElement('p', 'text-xl text-gray-400 mb-10 max-w-2xl mx-auto', "I'm always open to new opportunities and collaborations.");
+    const p = createElement('p', 'contact-lede', 'Robotics companies, researchers, and factory partners can get in touch to explore a DGlove1 pilot, tactile-data collaboration, or a technical build partnership.');
+    intro.appendChild(p);
+    container.appendChild(intro);
+
+    const form = createElement('form', 'contact-form');
+    form.setAttribute('aria-label', 'Pilot unit request form');
+
+    const field = (labelText, input) => {
+        const wrapper = createElement('label', 'contact-field');
+        const label = createElement('span', 'contact-field-label', labelText);
+        wrapper.appendChild(label);
+        wrapper.appendChild(input);
+        return wrapper;
+    };
+
+    const nameInput = createElement('input', 'contact-input');
+    nameInput.type = 'text';
+    nameInput.name = 'name';
+    nameInput.placeholder = 'Your name';
+    nameInput.autocomplete = 'name';
+    nameInput.required = true;
+
+    const emailInput = createElement('input', 'contact-input');
+    emailInput.type = 'email';
+    emailInput.name = 'email';
+    emailInput.placeholder = 'you@company.com';
+    emailInput.autocomplete = 'email';
+    emailInput.required = true;
+
+    const organizationInput = createElement('input', 'contact-input');
+    organizationInput.type = 'text';
+    organizationInput.name = 'organization';
+    organizationInput.placeholder = 'Company, lab, or factory';
+    organizationInput.autocomplete = 'organization';
+
+    const roleSelect = createElement('select', 'contact-input');
+    roleSelect.name = 'role';
+    roleSelect.required = true;
+    [
+        ['','I am reaching out as...'],
+        ['robotics-company','A robotics company'],
+        ['researcher','A researcher or lab'],
+        ['factory-partner','A factory or operations partner'],
+        ['other','A potential collaborator']
+    ].forEach(([value, text]) => {
+        const option = createElement('option', '', text);
+        option.value = value;
+        option.disabled = value === '';
+        option.selected = value === '';
+        roleSelect.appendChild(option);
+    });
+
+    const messageInput = createElement('textarea', 'contact-input contact-message');
+    messageInput.name = 'message';
+    messageInput.placeholder = 'What would you like to build or test?';
+    messageInput.rows = 5;
+    messageInput.required = true;
+
+    const fields = createElement('div', 'contact-field-grid');
+    fields.appendChild(field('Name', nameInput));
+    fields.appendChild(field('Email', emailInput));
+    fields.appendChild(field('Organization', organizationInput));
+    fields.appendChild(field('Partner type', roleSelect));
+    form.appendChild(fields);
+    form.appendChild(field('Project or pilot brief', messageInput));
+
+    const formFooter = createElement('div', 'contact-form-footer');
+    const note = createElement('p', 'contact-form-note', 'This opens your email client with the request prepared.');
+    const submit = createElement('button', 'contact-submit magnetic', 'Request a pilot unit <span aria-hidden="true">↗</span>');
+    submit.type = 'submit';
+    formFooter.appendChild(note);
+    formFooter.appendChild(submit);
+    form.appendChild(formFooter);
+
+    form.addEventListener('submit', (event) => {
+        event.preventDefault();
+        const data = new FormData(form);
+        const subject = `DGlove1 pilot request from ${data.get('name')}`;
+        const body = [
+            `Name: ${data.get('name')}`,
+            `Email: ${data.get('email')}`,
+            `Organization: ${data.get('organization') || 'Not provided'}`,
+            `Partner type: ${roleSelect.options[roleSelect.selectedIndex].text}`,
+            '',
+            String(data.get('message'))
+        ].join('\n');
+        window.location.href = `mailto:${portfolioData.personal.email.replace('mailto:', '')}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    });
+
+    container.appendChild(form);
     
     const links = createElement('div', 'flex justify-center gap-8 flex-wrap');
     
@@ -557,7 +647,6 @@ const renderContact = () => {
         links.appendChild(a);
     });
     
-    container.appendChild(p);
     container.appendChild(links);
     section.appendChild(container);
     return section;
